@@ -25,13 +25,16 @@ public class ShopDroid extends Activity {
     sendMsg.setOnClickListener(msgButtonListener);
   }
   
+  /**
+   * Create dialogs
+   */
   protected Dialog onCreateDialog(int id) {
     AlertDialog msgSentDialog;
     switch(id) {
       case DIALOG_MSG_SENT:
          AlertDialog.Builder buildMsgSent = new AlertDialog.Builder(this);
-         buildMsgSent.setMessage("Message Sent...")
-                     .setNeutralButton("Okay", new DialogInterface.OnClickListener() {
+         buildMsgSent.setMessage(R.string.msg_sent)
+                     .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                       
                       public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();                        

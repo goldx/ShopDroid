@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, ShopDroid!</string>
-    <string name="app_name">ShopDroid</string>
+  <string name="hello">Hello World, ShopDroid!</string>
+  <string name="app_name">ShopDroid</string>
+  <string name="msg_sent">Message Sent...</string>
+  <string name="ok">Okay</string>
 </resources>
