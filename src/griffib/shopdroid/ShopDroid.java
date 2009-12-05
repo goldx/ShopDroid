@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,7 +13,7 @@ import android.widget.Button;
 
 public class ShopDroid extends Activity {
   
-  static final int DIALOG_MSG_SENT = 0;
+  private static final int DIALOG_MSG_SENT = 0;
   
   /** Called when the activity is first created. */
   @Override
@@ -20,9 +21,13 @@ public class ShopDroid extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
     
-    //Find button
+    // Find button
     Button sendMsg = (Button)findViewById(R.id.message_button);
     sendMsg.setOnClickListener(msgButtonListener);
+    
+    // Start some services
+    Intent startServer = new Intent(this, SDroidServer.class);
+    this.startService(startServer);
   }
   
   /**
@@ -56,6 +61,8 @@ public class ShopDroid extends Activity {
   
     // On a click send a message and tell the user
     public void onClick(View v) {
+      SDroidClient msg = new SDroidClient("Test Message", "localhost");
+      msg.send();
       // Message dialog
       showDialog(DIALOG_MSG_SENT);
     }

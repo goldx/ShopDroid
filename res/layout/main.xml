@@ -4,12 +4,27 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
+<EditText
+	android:id="@+id/msg_edit"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_centerVertical="true"
+	/>
 <Button 
 	android:id="@+id/message_button"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:text="Send message..."
-	android:layout_centerInParent="true"
+	android:layout_below="@id/msg_edit"
+	android:layout_centerHorizontal="true"
 	/>
-    
+<TextView
+	android:id="@+id/msg_recieved"
+	android:layout_below="@id/message_button"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_centerHorizontal="true"
+	android:text="No Message Received"
+	android:textSize="8pt"
+	/>    
 </RelativeLayout>
