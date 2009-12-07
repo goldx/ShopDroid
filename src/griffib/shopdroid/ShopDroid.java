@@ -14,7 +14,6 @@ import android.widget.Button;
 public class ShopDroid extends Activity {
   
   private static final int DIALOG_MSG_SENT = 0;
-  // a modification
   /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {

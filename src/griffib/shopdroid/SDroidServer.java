@@ -59,7 +59,7 @@ public class SDroidServer extends Service {
           while ((inputLine = in.readLine()) != null) {
             outputLine = inputLine;
             out.println(outputLine);
-            Log.i("TCP", "Message Sent: " + outputLine);
+            Log.i("TCP", "Message Recieved: " + outputLine);
           }
         } catch (IOException e) {
           e.printStackTrace();

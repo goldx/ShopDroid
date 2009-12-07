@@ -3,6 +3,8 @@ package griffib.shopdroid;
 import java.io.*;
 import java.net.*;
 
+import android.util.Log;
+
 public class SDroidClient {
 
   private final String msg;
@@ -22,7 +24,7 @@ public class SDroidClient {
     try {
       init();
     } catch (IOException e) {
-      e.printStackTrace();
+      Log.e("Server", e.toString());
     }
   }
   
