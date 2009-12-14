@@ -58,8 +58,9 @@ public class SDroidDb {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(CREATE_OFFERS_TABLE);
-        db.execSQL(CREATE_TAGS_TABLE);
+      // Create tables
+      db.execSQL(CREATE_OFFERS_TABLE);
+      db.execSQL(CREATE_TAGS_TABLE);
     }
 
     @Override
