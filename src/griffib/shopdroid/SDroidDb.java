@@ -21,12 +21,26 @@ public class SDroidDb {
 
   private final Context mtx;
   
-  private static final String DATABASE_CREATE =
-    "create table notes (_id integer primary key autoincrement, "
-            + "title text not null, body text not null);";
+  // SQL for creating databases
+  private static final String CREATE_OFFERS_TABLE = "create table Offers (" +
+                                    "_id integer primary key autoincrement," +
+                                    "product_name text not null," +
+                                    "tag_id integer foreign key references Tag(_id)" +
+                                    ")";
+  
+  private static final String CREATE_TAGS_TABLE = "create table Tags (" +
+  		                               "_id integer primary key autoincrement," +
+  		                               "namespace text not null" +
+  		                               "predicate text not null" +
+  		                               "value text not null" +
+  		                               "offer_id foreign key references Offer(_id)" +
+  		                               ")";
+  
   
   private static final String DATABASE_NAME = "SDroid";
-  private static final String DATABASE_TABLE = "test_table";
+  private static final String OFFERS_TABLE = "Offers";
+  private static final String TAGS_TABLE = "Tags";
+  
   private static final int DATABASE_VERSION = 2;
   
   /**
@@ -44,14 +58,16 @@ public class SDroidDb {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(DATABASE_CREATE);
+        db.execSQL(CREATE_OFFERS_TABLE);
+        db.execSQL(CREATE_TAGS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS notes");
+        db.execSQL("DROP TABLE IF EXISTS " + OFFERS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TAGS_TABLE);
         onCreate(db);
     }
   }
