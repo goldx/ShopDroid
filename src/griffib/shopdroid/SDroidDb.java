@@ -21,7 +21,7 @@ public class SDroidDb {
 
   private final Context mtx;
   
-  // SQL for creating databases
+  // SQL for creating tables
   private static final String CREATE_OFFERS_TABLE = "create table Offers (" +
                                     "_id integer primary key autoincrement," +
                                     "product_name text not null," +
