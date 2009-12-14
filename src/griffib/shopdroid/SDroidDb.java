@@ -37,7 +37,8 @@ public class SDroidDb {
   		                               ")";
   
   private static final String DATABASE_NAME = "SDroid";
-  private static final String DATABASE_TABLE = "test_table";
+  private static final String OFFERS_TABLE = "Offers";
+  private static final String TAGS_TABLE = "Tags";
   private static final int DATABASE_VERSION = 2;
   
   /**
@@ -55,14 +56,17 @@ public class SDroidDb {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(DATABASE_CREATE);
+      // Create tables
+      db.execSQL(CREATE_OFFERS_TABLE);
+      db.execSQL(CREATE_TAGS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + OFFERS_TABLE);
+	db.execSQL("DROP TABLE IF EXISTS " + TAGS_TABLE);
         onCreate(db);
     }
   }
