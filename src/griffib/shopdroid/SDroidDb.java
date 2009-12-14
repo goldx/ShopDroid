@@ -21,9 +21,20 @@ public class SDroidDb {
 
   private final Context mtx;
   
-  private static final String DATABASE_CREATE =
-    "create table test_table (_id integer primary key autoincrement, "
-            + "title text not null, body text not null);";
+  // SQL for creating tables
+  private static final String CREATE_OFFERS_TABLE = "create table Offers (" +
+                                    "_id integer primary key autoincrement," +
+                                    "product_name text not null," +
+                                    "tag_id integer foreign key references Tag(_id)" +
+                                    ")";
+  
+  private static final String CREATE_TAGS_TABLE = "create table Tags (" +
+  		                               "_id integer primary key autoincrement," +
+  		                               "namespace text not null" +
+  		                               "predicate text not null" +
+  		                               "value text not null" +
+  		                               "offer_id foreign key references Offer(_id)" +
+  		                               ")";
   
   private static final String DATABASE_NAME = "SDroid";
   private static final String DATABASE_TABLE = "test_table";
