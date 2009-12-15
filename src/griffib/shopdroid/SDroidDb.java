@@ -123,11 +123,12 @@ public class SDroidDb {
 	  return mDb.insert(OFFERS_TABLE, null, offerTableValues);
   }
   
-  public long addTag(String namesp, String pred, String val) {
+  public long addTag(String namesp, String pred, String val, String offer) {
 	  ContentValues tagTableValues = new ContentValues();
 	  tagTableValues.put(KEY_TAGS_NAMESPACE, namesp);
 	  tagTableValues.put(KEY_TAGS_PREDICATE, pred);
 	  tagTableValues.put(KEY_TAGS_VALUE, val);
+	  tagTableValues.put(KEY_OFFERS_ID, offer);
 	  
 	  return mDb.insert(TAGS_TABLE, null, tagTableValues);
   }
