@@ -4,4 +4,6 @@
   <string name="app_name">ShopDroid</string>
   <string name="msg_sent">Message Sent...</string>
   <string name="ok">Okay</string>
+  <string name="menu_add">Add Item</string>
+  <string name="menu_delete">Delete Item</string>
 </resources>

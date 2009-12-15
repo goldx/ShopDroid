@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="griffib.shopdroid"
-      android:versionCode="1" android:versionName="alpha_1.0">
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".ShopDroid"
-                  android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-    <service android:name=".SDroidServer"></service>
-</application>
-    <uses-sdk android:minSdkVersion="4" />
-
-<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	package="griffib.shopdroid"
+	android:versionCode="1" android:versionName="alpha_1.0">
+	<application android:icon="@drawable/icon" android:theme="@android:style/Theme.NoTitleBar">
+		<activity android:name=".SDroidTabs">
+			<intent-filter>
+			<action android:name="android.intent.action.MAIN" />
+			<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<service android:name="SDroidServer"></service>
+		<activity android:name="DatabaseActivity"></activity>
+		<activity android:name="ShopDroid"></activity>
+	</application>
+	<uses-sdk android:minSdkVersion="4" />
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 

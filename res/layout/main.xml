@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@android:id/tabhost"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  <LinearLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<EditText
-	android:id="@+id/msg_edit"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:layout_centerVertical="true"
-	/>
-<Button 
-	android:id="@+id/message_button"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:text="Send message..."
-	android:layout_below="@id/msg_edit"
-	android:layout_centerHorizontal="true"
-	/>
-<TextView
-	android:id="@+id/msg_recieved"
-	android:layout_below="@id/message_button"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:layout_centerHorizontal="true"
-	android:text="No Message Received"
-	android:textSize="8pt"
-	/>    
-</RelativeLayout>
+    android:layout_height="fill_parent">
+    <TabWidget
+      android:id="@android:id/tabs"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content" />
+    <FrameLayout
+      android:id="@android:id/tabcontent"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent">            
+    </FrameLayout>
+  </LinearLayout>
+</TabHost>
