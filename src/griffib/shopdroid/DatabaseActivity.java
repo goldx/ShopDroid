@@ -22,10 +22,10 @@ public class DatabaseActivity extends ListActivity {
   
   private static final int MENU_ADD = Menu.FIRST;
   private static final int DELETE_ID = Menu.FIRST + 1;
-  private static int offerNum = 0;
+//  private static int offerNum = 0;
   
   private static final int NEW_OFFER = 0;
-  private static final int EDIT_OFFER = 1;
+//  private static final int EDIT_OFFER = 1;
   
   private SDroidDb dbHelper;
   
@@ -85,19 +85,22 @@ public class DatabaseActivity extends ListActivity {
   protected void onActivityResult(int requestCode, int resultCode,
                                   Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    Bundle extras = data.getExtras();
     
-    switch(requestCode) {
-    case NEW_OFFER:
-      String product = extras.getString("product_name");
-      String namesp1 = extras.getString("namesp1");
-      String val1 = extras.getString("val1");
-      String namesp2 = extras.getString("namesp2");
-      String val2 = extras.getString("val2");
-      dbHelper.createOffer(product);
-      //dbHelper.addTag(namesp, pred, val,)
-      fillData();
-      break;
+    
+    if (resultCode != RESULT_CANCELED) {
+      Bundle extras = data.getExtras();
+      switch(requestCode) {
+      case NEW_OFFER:
+        String product = extras.getString("product_name");
+        /*String namesp1 = extras.getString("namesp1");
+        String val1 = extras.getString("val1");
+        String namesp2 = extras.getString("namesp2");
+        String val2 = extras.getString("val2");*/
+        dbHelper.createOffer(product);
+        //dbHelper.addTag(namesp, pred, val,)
+        fillData();
+        break;
+      }
     }
   }
 
