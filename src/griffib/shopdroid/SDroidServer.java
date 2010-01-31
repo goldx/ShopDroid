@@ -46,21 +46,22 @@ public class SDroidServer extends Service {
         ServerSocket serverSocket;
         Socket clientSocket;
         try {
-          
-          // Open socket and listen
-          serverSocket = new ServerSocket(1234);
-          clientSocket = serverSocket.accept();
-          
-          // Setup i/o
-          PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-          BufferedReader in = new BufferedReader(new InputStreamReader(
-                                                     clientSocket.getInputStream()));
-          String inputLine, outputLine;
-          while ((inputLine = in.readLine()) != null) {
-            outputLine = inputLine;
-            out.println(outputLine);
-            Log.i("TCP", "Message Recieved: " + outputLine);
-          }
+          //do {
+            // Open socket and listen
+            serverSocket = new ServerSocket(1234);
+            clientSocket = serverSocket.accept();
+            
+            // Setup i/o
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                                                       clientSocket.getInputStream()));
+            String inputLine, outputLine;
+            while ((inputLine = in.readLine()) != null) {
+              outputLine = inputLine;
+              out.println(outputLine);
+              Log.i("TCP", "Message Recieved: " + outputLine);
+            }
+          //} while (true);
         } catch (IOException e) {
           e.printStackTrace();
         }

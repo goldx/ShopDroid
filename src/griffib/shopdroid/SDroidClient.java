@@ -42,10 +42,10 @@ public class SDroidClient {
    * Sends the message then closes the connection.
    */
   public void send() {
-    while (msg != null) {
+    //while (msg != null) {
       out.println(msg);
-      System.out.println("Client TCP: sent: " + msg);
-    }
+      System.out.println("Client TCP: Recieved: " + msg);
+    //}
     
     //Message sent, close connection
     try {
