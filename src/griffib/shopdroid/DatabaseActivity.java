@@ -22,6 +22,7 @@ public class DatabaseActivity extends ListActivity {
   
   private static final int MENU_ADD = Menu.FIRST;
   private static final int DELETE_ID = Menu.FIRST + 1;
+  private static final int EDIT_ID = Menu.FIRST + 2;
 //  private static int offerNum = 0;
   
   private static final int NEW_OFFER = 0;

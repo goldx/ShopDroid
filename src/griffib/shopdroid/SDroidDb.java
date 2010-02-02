@@ -25,7 +25,6 @@ public class SDroidDb {
   public static final String KEY_OFFERS_PRODUCT_NAME = "product_name";
   public static final String KEY_TAG_FOREIGN = "offer_id";
   public static final String KEY_TAG_ID = "_id";
-  public static final String KEY_TAGS_NAMESPACE = "namespace";
   public static final String KEY_TAGS_PREDICATE = "predicate";
   public static final String KEY_TAGS_VALUE = "value";
   
@@ -45,7 +44,6 @@ public class SDroidDb {
   
   private static final String CREATE_TAGS_TABLE = "create table Tags (" +
                        "_id integer primary key autoincrement," +
-                       "namespace text not null," +
                        "predicate text not null," +
                        "value text not null," +
                        "offer_id integer not null," +
@@ -125,7 +123,6 @@ public class SDroidDb {
   
   public long addTag(String namesp, String pred, String val, String offer) {
 	  ContentValues tagTableValues = new ContentValues();
-	  tagTableValues.put(KEY_TAGS_NAMESPACE, namesp);
 	  tagTableValues.put(KEY_TAGS_PREDICATE, pred);
 	  tagTableValues.put(KEY_TAGS_VALUE, val);
 	  tagTableValues.put(KEY_OFFERS_ID, offer);
