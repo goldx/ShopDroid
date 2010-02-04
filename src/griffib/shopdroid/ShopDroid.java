@@ -6,11 +6,15 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class ShopDroid extends Activity {
+  
+  private static final int SETTINGS_ID = Menu.FIRST;
   
   private static final int DIALOG_MSG_SENT = 0;
   /** Called when the activity is first created. */
@@ -66,4 +70,32 @@ public class ShopDroid extends Activity {
     }
   
   };
+
+  
+  /*
+   * Options menu
+   */
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    boolean result = super.onCreateOptionsMenu(menu);
+    menu.add(0, SETTINGS_ID, 0, R.string.menu_settings)
+        .setIcon(android.R.drawable.ic_menu_preferences);
+    return result;
+  }
+  
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+    case SETTINGS_ID:
+      Intent i = new Intent(this, SDroidSettings.class);
+      startActivity(i);
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+  
+  /*
+   * END of Options menu
+   */
 }

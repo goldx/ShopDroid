@@ -28,6 +28,8 @@ public class SDroidDb {
   public static final String KEY_TAGS_PREDICATE = "predicate";
   public static final String KEY_TAGS_VALUE = "value";
   
+  public static final String KEY_TAGS_ARRAY = "tags_array";
+  
   
   private static final String TAG = "NotesDbAdapter";
   private DatabaseHelper mDbHelper;

@@ -1,14 +1,14 @@
 package griffib.shopdroid;
 
-import griffib.shopdroid.R.layout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+//import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 public class EditOffer extends Activity {
@@ -24,8 +24,30 @@ public class EditOffer extends Activity {
     
     Button confirmButton = (Button) findViewById(R.id.btn_done);
     Button cancelButton = (Button) findViewById(R.id.btn_discard);
-    ImageButton addAttrButton = (ImageButton) findViewById(R.id.add_attr);
+ //   ImageButton addAttrButton = (ImageButton) findViewById(R.id.add_attr);
     
+    
+    /*
+     * Programmatically finish building the UI
+     */
+    
+    for (int i = 0; i<5; i++) {
+      LinearLayout attrList = (LinearLayout) findViewById(R.id.attr_list);
+      LayoutInflater inflater = getLayoutInflater();
+      View row = inflater.inflate(R.layout.attr_row, null);
+      LinearLayout extraAttr = (LinearLayout) row.findViewById(R.id.attr_row);
+      
+      ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                              ViewGroup.LayoutParams.FILL_PARENT,
+                              ViewGroup.LayoutParams.FILL_PARENT);
+      
+      attrList.addView(extraAttr, i, params);
+    }
+    
+    
+    /*
+     * Set up button listeners
+     */
     
     confirmButton.setOnClickListener(new View.OnClickListener() {
       
@@ -35,6 +57,10 @@ public class EditOffer extends Activity {
         
         bundle.putString(SDroidDb.KEY_OFFERS_PRODUCT_NAME,
                          productName.getText().toString());
+        
+        String[][] tags = new String[5][5];
+        
+        
         
         Intent i = new Intent();
         i.putExtras(bundle);
@@ -52,19 +78,19 @@ public class EditOffer extends Activity {
     }
    });
    
-   addAttrButton.setOnClickListener(new View.OnClickListener() {
-    
-    @Override
-    public void onClick(View v) {
-      
-      LinearLayout attrList = (LinearLayout) findViewById(R.id.attr_list);
-      LayoutInflater inflater = getLayoutInflater();
-      View row = inflater.inflate(R.layout.attr_row, null);
-      LinearLayout extraAttr = (LinearLayout) row.findViewById(R.id.attr_row);
-      attrList.addView(extraAttr);
-      
-    }
-   });
+//   addAttrButton.setOnClickListener(new View.OnClickListener() {
+//    
+//    @Override
+//    public void onClick(View v) {
+//      
+//      LinearLayout attrList = (LinearLayout) findViewById(R.id.attr_list);
+//      LayoutInflater inflater = getLayoutInflater();
+//      View row = inflater.inflate(R.layout.attr_row, null);
+//      LinearLayout extraAttr = (LinearLayout) row.findViewById(R.id.attr_row);
+//      attrList.addView(extraAttr);
+//      
+//    }
+//   });
    
     
   }

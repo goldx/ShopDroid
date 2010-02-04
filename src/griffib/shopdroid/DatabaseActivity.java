@@ -23,6 +23,7 @@ public class DatabaseActivity extends ListActivity {
   private static final int MENU_ADD = Menu.FIRST;
   private static final int DELETE_ID = Menu.FIRST + 1;
   private static final int EDIT_ID = Menu.FIRST + 2;
+  private static final int SETTINGS_ID = Menu.FIRST + 3;
 //  private static int offerNum = 0;
   
   private static final int NEW_OFFER = 0;
@@ -46,10 +47,17 @@ public class DatabaseActivity extends ListActivity {
     registerForContextMenu(getListView());
   }
   
+  /*
+   * Options menu
+   */
+  
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     boolean result = super.onCreateOptionsMenu(menu);
-    menu.add(0, MENU_ADD, 0, R.string.menu_add);
+    menu.add(0, MENU_ADD, 0, R.string.menu_add)
+        .setIcon(android.R.drawable.ic_menu_add);
+    menu.add(0, SETTINGS_ID, 0, R.string.menu_settings)
+        .setIcon(android.R.drawable.ic_menu_preferences);
     return result;
   }
   
@@ -59,9 +67,17 @@ public class DatabaseActivity extends ListActivity {
     case MENU_ADD:
       createNewOffer();
       return true;
+    case SETTINGS_ID:
+      Intent i = new Intent(this, SDroidSettings.class);
+      startActivity(i);
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }
+  
+  /*
+   * END of Options menu
+   */
   
   @Override
   public void onCreateContextMenu(ContextMenu menu, View v,
