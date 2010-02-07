@@ -28,8 +28,8 @@ public class ShopDroid extends Activity {
     sendMsg.setOnClickListener(msgButtonListener);
     
     // Start some services
-    Intent startServer = new Intent(this, SDroidServer.class);
-    this.startService(startServer);
+    //Intent startServer = new Intent(this, SDroidServer.class);
+    //this.startService(startServer);
   }
   
   /**

@@ -20,10 +20,10 @@ public class SDroidTabs extends TabActivity {
     setContentView(R.layout.main);
     
     TabHost tabs = getTabHost();
-    tabs.addTab(tabs.newTabSpec("Tab1").setIndicator("Messaging").
-                setContent(new Intent(this, ShopDroid.class)));
-    tabs.addTab(tabs.newTabSpec("Tab2").setIndicator("Database").
+    tabs.addTab(tabs.newTabSpec("Tab1").setIndicator("Database").
                 setContent(new Intent(this, DatabaseActivity.class)));
+    tabs.addTab(tabs.newTabSpec("Tab2").setIndicator("Messaging").
+                setContent(new Intent(this, ShopDroid.class)));
     
   }
 
