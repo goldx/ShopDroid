@@ -45,6 +45,11 @@ public class DatabaseActivity extends ListActivity {
     
     // Setup a context menu
     registerForContextMenu(getListView());
+    
+    // Start server
+    // The Server listens for incoming sync requests
+    Intent startServer = new Intent(this, SDroidServer.class);
+    this.startService(startServer);
   }
   
   /*
@@ -108,13 +113,17 @@ public class DatabaseActivity extends ListActivity {
       Bundle extras = data.getExtras();
       switch(requestCode) {
       case NEW_OFFER:
-        String product = extras.getString("product_name");
-        /*String namesp1 = extras.getString("namesp1");
-        String val1 = extras.getString("val1");
-        String namesp2 = extras.getString("namesp2");
-        String val2 = extras.getString("val2");*/
-        dbHelper.createOffer(product);
-        //dbHelper.addTag(namesp, pred, val,)
+        String product = extras.getString(SDroidDb.KEY_OFFERS_PRODUCT_NAME);
+        
+        String[] tagPreds = extras.getStringArray(SDroidDb.KEY_TAGS_PREDICATE);
+        String[] tagVals = extras.getStringArray(SDroidDb.KEY_TAGS_VALUE);
+        
+        long rowId = dbHelper.createOffer(product);
+        
+        for (int i=0; i<tagPreds.length; i++) {
+          dbHelper.addTag(tagPreds[i], tagVals[i], rowId);
+        }
+        
         fillData();
         break;
       }
