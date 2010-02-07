@@ -121,7 +121,8 @@ public class SDroidDb {
 	  return mDb.insert(OFFERS_TABLE, null, offerTableValues);
   }
   
-  public long addTag(String namesp, String pred, String val, String offer) {
+  
+  public long addTag(String pred, String val, String offer) {
 	  ContentValues tagTableValues = new ContentValues();
 	  tagTableValues.put(KEY_TAGS_PREDICATE, pred);
 	  tagTableValues.put(KEY_TAGS_VALUE, val);
@@ -144,8 +145,17 @@ public class SDroidDb {
     
   }
   
-  public void updateOffer() {
-    
+  /**
+   * Update an offer. Offer to be updated is specified by the rowId.
+   * @param newProdName 
+   * @param rowId
+   * @return true if there was a successful update, else false.
+   */
+  public boolean updateOffer(String newProdName, long rowId) {
+    ContentValues UpdatedOfferVals = new ContentValues();
+    UpdatedOfferVals.put(KEY_OFFERS_PRODUCT_NAME, newProdName);
+    return mDb.update(OFFERS_TABLE, UpdatedOfferVals, 
+        KEY_OFFERS_ID + "=" + rowId, null) > 0;
   }
   
   public void updateTag() {

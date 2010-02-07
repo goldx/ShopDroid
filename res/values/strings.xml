@@ -6,6 +6,7 @@
   <string name="ok">Okay</string>
   <string name="menu_add">Add Item</string>
   <string name="menu_delete">Delete Item</string>
+  <string name="menu_edit">Edit Item</string>
   <string name="edit_offer1">Product Name:</string>
   <string name="discard">Discard</string>
   <string name="edit_subtitle">Tags</string>
