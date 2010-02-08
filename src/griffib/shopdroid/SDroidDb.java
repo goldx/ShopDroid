@@ -51,7 +51,7 @@ public class SDroidDb {
                        "offer_id integer" +
                        ")";
 
-  private static final String DATABASE_NAME = "Local_Offers";
+  
   private static final String OFFERS_TABLE = "Offers";
   private static final String TAGS_TABLE = "Tags";
   private static final int DATABASE_VERSION = 2;
@@ -62,10 +62,10 @@ public class SDroidDb {
    * @author Ben Griffiths
    *
    */
-    private static class DatabaseHelper extends SQLiteOpenHelper {
+  private static class DatabaseHelper extends SQLiteOpenHelper {
 
-    DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    DatabaseHelper(Context context, String dbName) {
+      super(context, dbName, null, DATABASE_VERSION);
     }
 
     @Override
@@ -102,8 +102,8 @@ public class SDroidDb {
    * @return this
    * @throws SQLException if the database cannot be opened or created
    */
-  public SDroidDb open() throws SQLException {
-    mDbHelper = new DatabaseHelper(mCtx);
+  public SDroidDb open(String dbName) throws SQLException {
+    mDbHelper = new DatabaseHelper(mCtx, dbName);
     mDb = mDbHelper.getWritableDatabase();
     return this;
   }

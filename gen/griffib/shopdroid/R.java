@@ -47,34 +47,22 @@ public final class R {
         public static final int shopdroid=0x7f030006;
     }
     public static final class string {
-<<<<<<< HEAD
-        public static final int app_name=0x7f040001;
-        public static final int discard=0x7f040008;
-        public static final int edit_offer1=0x7f040007;
-        public static final int edit_subtitle=0x7f040009;
-        public static final int hello=0x7f040000;
-        public static final int menu_add=0x7f040004;
-        public static final int menu_delete=0x7f040005;
-        public static final int menu_edit=0x7f040006;
-        public static final int msg_sent=0x7f040002;
-        public static final int ok=0x7f040003;
-=======
         public static final int app_name=0x7f050001;
-        public static final int discard=0x7f050009;
-        public static final int edit_offer1=0x7f050008;
-        public static final int edit_subtitle=0x7f05000a;
+        public static final int discard=0x7f05000a;
+        public static final int edit_offer1=0x7f050009;
+        public static final int edit_subtitle=0x7f05000b;
         public static final int hello=0x7f050000;
         public static final int menu_add=0x7f050004;
         public static final int menu_delete=0x7f050005;
-        public static final int menu_settings=0x7f050006;
-        public static final int menu_sync=0x7f050007;
+        public static final int menu_edit=0x7f050006;
+        public static final int menu_settings=0x7f050007;
+        public static final int menu_sync=0x7f050008;
         public static final int msg_sent=0x7f050002;
         public static final int ok=0x7f050003;
-        public static final int pref_notifications_summary=0x7f05000c;
-        public static final int pref_notifications_title=0x7f05000b;
+        public static final int pref_notifications_summary=0x7f05000d;
+        public static final int pref_notifications_title=0x7f05000c;
     }
     public static final class xml {
         public static final int settings=0x7f040000;
->>>>>>> 2ccb68ca46c66b813fd120f73e222e94fb86bd01
     }
 }
