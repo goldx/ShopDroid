@@ -28,6 +28,8 @@ public class SDroidDb {
   public static final String KEY_TAGS_PREDICATE = "predicate";
   public static final String KEY_TAGS_VALUE = "value";
   
+  public static final String KEY_TAGS_ARRAY = "tags_array";
+  
   
   private static final String TAG = "NotesDbAdapter";
   private DatabaseHelper mDbHelper;
@@ -44,10 +46,9 @@ public class SDroidDb {
   
   private static final String CREATE_TAGS_TABLE = "create table Tags (" +
                        "_id integer primary key autoincrement," +
-                       "predicate text not null," +
-                       "value text not null," +
-                       "offer_id integer not null," +
-                       "foreign key (offer_id) references Offers (_id)" +
+                       "predicate text," +
+                       "value text," +
+                       "offer_id integer" +
                        ")";
 
   private static final String DATABASE_NAME = "Local_Offers";
@@ -121,8 +122,7 @@ public class SDroidDb {
 	  return mDb.insert(OFFERS_TABLE, null, offerTableValues);
   }
   
-  
-  public long addTag(String pred, String val, String offer) {
+  public long addTag(String pred, String val, long offer) {
 	  ContentValues tagTableValues = new ContentValues();
 	  tagTableValues.put(KEY_TAGS_PREDICATE, pred);
 	  tagTableValues.put(KEY_TAGS_VALUE, val);

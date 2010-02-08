@@ -1,14 +1,14 @@
 package griffib.shopdroid;
 
-//import griffib.shopdroid.R.layout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+//import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 public class EditOffer extends Activity {
@@ -26,7 +26,7 @@ public class EditOffer extends Activity {
     // Set up buttons
     Button confirmButton = (Button) findViewById(R.id.btn_done);
     Button cancelButton = (Button) findViewById(R.id.btn_discard);
-    ImageButton addAttrButton = (ImageButton) findViewById(R.id.add_attr);
+ //   ImageButton addAttrButton = (ImageButton) findViewById(R.id.add_attr);
     
     
     // If editing an entry - get and set up current values
@@ -42,6 +42,29 @@ public class EditOffer extends Activity {
     }
     
     // Confirm new offer or edit
+    /*
+     * Programmatically finish building the UI
+     */
+    
+    for (int i = 0; i<5; i++) {
+      LinearLayout attrList = (LinearLayout) findViewById(R.id.attr_list);
+      LayoutInflater inflater = getLayoutInflater();
+      View row = inflater.inflate(R.layout.attr_row, null);
+      LinearLayout extraAttr = (LinearLayout) row.findViewById(R.id.attr_row);
+      
+      ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                              ViewGroup.LayoutParams.FILL_PARENT,
+                              ViewGroup.LayoutParams.FILL_PARENT);
+      extraAttr.setId(i);
+      attrList.addView(extraAttr, i, params);
+    }
+    
+    
+    /*
+     * Set up button listeners
+     */
+    
+
     confirmButton.setOnClickListener(new View.OnClickListener() {
       
       @Override
@@ -51,6 +74,25 @@ public class EditOffer extends Activity {
         bundle.putString(SDroidDb.KEY_OFFERS_PRODUCT_NAME,
                          productName.getText().toString());
         
+        // Build arrays of attributes
+        String[] tagsAttrName = new String[5];
+        String[] tagsAttrVal = new String[5];
+        
+        // Find attribute names and fill array
+        for (int i = 0; i<5; i++) {
+          EditText et = (EditText) findViewById(i).findViewById(R.id.attr_name);
+          tagsAttrName[i] = et.getText().toString();
+        }
+        
+        // Find attribute values and fill array
+        for (int i = 0; i<5; i++) {
+          EditText et  =(EditText) findViewById(i).findViewById(R.id.attr_val);
+          tagsAttrVal[i] = et.getText().toString();
+        }
+        
+        bundle.putStringArray(SDroidDb.KEY_TAGS_PREDICATE, tagsAttrName);
+        bundle.putStringArray(SDroidDb.KEY_TAGS_VALUE, tagsAttrVal);
+                                     
         Intent i = new Intent();
         i.putExtras(bundle);
         setResult(RESULT_OK, i);
@@ -67,19 +109,19 @@ public class EditOffer extends Activity {
     }
    });
    
-   addAttrButton.setOnClickListener(new View.OnClickListener() {
-    
-    @Override
-    public void onClick(View v) {
-      
-      LinearLayout attrList = (LinearLayout) findViewById(R.id.attr_list);
-      LayoutInflater inflater = getLayoutInflater();
-      View row = inflater.inflate(R.layout.attr_row, null);
-      LinearLayout extraAttr = (LinearLayout) row.findViewById(R.id.attr_row);
-      attrList.addView(extraAttr);
-      
-    }
-   });
+//   addAttrButton.setOnClickListener(new View.OnClickListener() {
+//    
+//    @Override
+//    public void onClick(View v) {
+//      
+//      LinearLayout attrList = (LinearLayout) findViewById(R.id.attr_list);
+//      LayoutInflater inflater = getLayoutInflater();
+//      View row = inflater.inflate(R.layout.attr_row, null);
+//      LinearLayout extraAttr = (LinearLayout) row.findViewById(R.id.attr_row);
+//      attrList.addView(extraAttr);
+//      
+//    }
+//   });
    
     
   }

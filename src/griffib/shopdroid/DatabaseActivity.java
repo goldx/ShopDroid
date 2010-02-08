@@ -24,6 +24,8 @@ public class DatabaseActivity extends ListActivity {
   private static final int MENU_ADD = Menu.FIRST;
   private static final int DELETE_ID = Menu.FIRST + 1;
   private static final int EDIT_ID = Menu.FIRST + 2;
+  private static final int SYNC_ID = Menu.FIRST + 3;
+  private static final int SETTINGS_ID = Menu.FIRST + 4;
 //  private static int offerNum = 0;
   
   private static final int NEW_OFFER = 0;
@@ -46,16 +48,26 @@ public class DatabaseActivity extends ListActivity {
     
     // Setup a context menu
     registerForContextMenu(getListView());
+    
+    // Start server
+    // The Server listens for incoming sync requests
+    Intent startServer = new Intent(this, SDroidServer.class);
+    this.startService(startServer);
   }
-  
-  /**
-   * Menu accessed by pressing menu button on device
+
+  /*
+   * Options menu
    */
+  
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     boolean result = super.onCreateOptionsMenu(menu);
-    // Option to add a new entry to the Db
-    menu.add(0, MENU_ADD, 0, R.string.menu_add);
+    menu.add(0, MENU_ADD, 0, R.string.menu_add)
+        .setIcon(android.R.drawable.ic_menu_add);
+    menu.add(0, SYNC_ID, 0, R.string.menu_sync)
+        .setIcon(android.R.drawable.ic_menu_rotate);
+    menu.add(0, SETTINGS_ID, 0, R.string.menu_settings)
+        .setIcon(android.R.drawable.ic_menu_preferences);
     return result;
   }
   
@@ -68,13 +80,22 @@ public class DatabaseActivity extends ListActivity {
     case MENU_ADD:
       createNewOffer();
       return true;
+    case SYNC_ID:
+      syncOffers();
+      return true;
+    case SETTINGS_ID:
+      Intent i = new Intent(this, SDroidSettings.class);
+      startActivity(i);
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }
   
-  /**
-   * Builds the context menu accessed by a long press.
+  /*
+   * END of Options menu
    */
+  
+
   @Override
   public void onCreateContextMenu(ContextMenu menu, View v,
       ContextMenuInfo menuInfo) {
@@ -128,12 +149,16 @@ public class DatabaseActivity extends ListActivity {
       switch(requestCode) {
       case NEW_OFFER:
         String product = extras.getString(SDroidDb.KEY_OFFERS_PRODUCT_NAME);
-        /*String namesp1 = extras.getString("namesp1");
-        String val1 = extras.getString("val1");
-        String namesp2 = extras.getString("namesp2");
-        String val2 = extras.getString("val2");*/
-        dbHelper.createOffer(product);
-        //dbHelper.addTag(namesp, pred, val,)
+        
+        String[] tagPreds = extras.getStringArray(SDroidDb.KEY_TAGS_PREDICATE);
+        String[] tagVals = extras.getStringArray(SDroidDb.KEY_TAGS_VALUE);
+        
+        long rowId = dbHelper.createOffer(product);
+        
+        for (int i=0; i<tagPreds.length; i++) {
+          dbHelper.addTag(tagPreds[i], tagVals[i], rowId);
+        }
+        
         fillData();
         break;
       case EDIT_OFFER:
@@ -152,6 +177,10 @@ public class DatabaseActivity extends ListActivity {
   private void createNewOffer() {
     Intent i = new Intent(this, EditOffer.class);
     startActivityForResult(i, NEW_OFFER);
+  }
+  
+  private void syncOffers() {
+    
   }
 
   private void fillData() {
