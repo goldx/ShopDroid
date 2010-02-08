@@ -28,10 +28,12 @@ public class DatabaseActivity extends ListActivity {
   private static final int SETTINGS_ID = Menu.FIRST + 4;
 //  private static int offerNum = 0;
   
+  private static final String DB_LOCAL_OFFERS = "Local_Offers";
+  
   private static final int NEW_OFFER = 0;
   private static final int EDIT_OFFER = 1;
   
-  private SDroidDb dbHelper;
+  private SDroidDb dbHelperLocal;
   private Cursor offerCurser;
   
   @Override
@@ -40,8 +42,8 @@ public class DatabaseActivity extends ListActivity {
     setContentView(R.layout.db_list);
     
     // Get the local database
-    dbHelper = new SDroidDb(this);
-    dbHelper.open();
+    dbHelperLocal = new SDroidDb(this);
+    dbHelperLocal.open(DB_LOCAL_OFFERS);
     
     // Populate the list
     fillData();
@@ -114,7 +116,7 @@ public class DatabaseActivity extends ListActivity {
     // First case - deleting an item from the Db
     case DELETE_ID:
       AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-      dbHelper.deleteOffer(info.id);
+      dbHelperLocal.deleteOffer(info.id);
       fillData();
       return true;
       
@@ -146,6 +148,7 @@ public class DatabaseActivity extends ListActivity {
     
     if (resultCode != RESULT_CANCELED) {
       Bundle extras = data.getExtras();
+      Long rowId;
       switch(requestCode) {
       case NEW_OFFER:
         String product = extras.getString(SDroidDb.KEY_OFFERS_PRODUCT_NAME);
@@ -153,20 +156,20 @@ public class DatabaseActivity extends ListActivity {
         String[] tagPreds = extras.getStringArray(SDroidDb.KEY_TAGS_PREDICATE);
         String[] tagVals = extras.getStringArray(SDroidDb.KEY_TAGS_VALUE);
         
-        long rowId = dbHelper.createOffer(product);
+        rowId = dbHelperLocal.createOffer(product);
         
         for (int i=0; i<tagPreds.length; i++) {
-          dbHelper.addTag(tagPreds[i], tagVals[i], rowId);
+          dbHelperLocal.addTag(tagPreds[i], tagVals[i], rowId);
         }
         
         fillData();
         break;
       case EDIT_OFFER:
-        Long rowId = extras.getLong(SDroidDb.KEY_OFFERS_ID);
+        rowId = extras.getLong(SDroidDb.KEY_OFFERS_ID);
         if (rowId != null) {
           String newProdName = extras
               .getString(SDroidDb.KEY_OFFERS_PRODUCT_NAME);
-          dbHelper.updateOffer(newProdName, rowId);
+          dbHelperLocal.updateOffer(newProdName, rowId);
         }
         fillData();
         break;
@@ -184,14 +187,14 @@ public class DatabaseActivity extends ListActivity {
   }
 
   private void fillData() {
-    offerCurser = dbHelper.fetchAllOffers();
+    offerCurser = dbHelperLocal.fetchAllOffers();
     startManagingCursor(offerCurser);
     
     String[] from = new String[] { SDroidDb.KEY_OFFERS_PRODUCT_NAME };
     int[] to = new int[] { R.id.row_text };
     
-    SimpleCursorAdapter offers =
+    SimpleCursorAdapter localOffers =
       new SimpleCursorAdapter(this, R.layout.db_row, offerCurser, from, to);
-    setListAdapter(offers);
+    setListAdapter(localOffers);
   }
 }
