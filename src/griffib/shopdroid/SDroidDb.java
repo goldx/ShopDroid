@@ -21,13 +21,13 @@ import android.util.Log;
  */
 public class SDroidDb {
   
-  public static final String KEY_OFFERS_ID = "_id";
-  public static final String KEY_OFFERS_PRODUCT_NAME = "product_name";
-  public static final String KEY_TAG_FOREIGN = "offer_id";
-  public static final String KEY_TAG_ID = "_id";
-  public static final String KEY_TAGS_PREDICATE = "predicate";
-  public static final String KEY_TAGS_VALUE = "value";
-  
+  public static final String KEY_ID = "_id";
+  public static final String KEY_PRODUCT_ID = "product_id";
+  public static final String KEY_PRODUCTS_PRODUCT_NAME = "product_name";
+  public static final String KEY_OFFER_ID = "offer_id";
+  public static final String KEY_ATTRIBUTES_PREDICATE = "predicate";
+  public static final String KEY_ATTRIBUTES_VALUE = "value";
+  public static final String KEY_OFFER_SUM = "offer_summary";
   public static final String KEY_TAGS_ARRAY = "tags_array";
   
   
@@ -39,22 +39,37 @@ public class SDroidDb {
   
   // SQL for creating tables
   // Changes
-  private static final String CREATE_OFFERS_TABLE = "create table Offers (" +
-                                    "_id integer primary key autoincrement," +
-                                    "product_name text not null" +
-                                    ")";
+  private static final String CREATE_OFFERS_TABLE = 
+                              "create table Offers (" +
+                              "_id integer primary key autoincrement," +
+                              "offer_summary text" +
+                              ")";
   
-  private static final String CREATE_TAGS_TABLE = "create table Tags (" +
-                       "_id integer primary key autoincrement," +
-                       "predicate text," +
-                       "value text," +
-                       "offer_id integer" +
-                       ")";
+  private static final String CREATE_PRODUCT_OFFERS = 
+                              "create table Products_Offers (" +
+                              "product_id integer," +
+                              "offer_id integer)";
+  
+  private static final String CREATE_PRODUCTS_TABLE = 
+                              "create table Products (" +
+  		                        "_id integer primary key autoincrement," +
+  		                        "product_name text," +
+  		                        "UNIQUE (product_name) )";
+  
+  private static final String CREATE_ATTRIBUTES_TABLE = 
+                              "create table Attributes (" +
+                              "_id integer primary key autoincrement," +
+                              "predicate text," +
+                              "value text," +
+                              "offer_id integer" +
+                              ")";
 
   
   private static final String OFFERS_TABLE = "Offers";
-  private static final String TAGS_TABLE = "Tags";
-  private static final int DATABASE_VERSION = 2;
+  private static final String ATTRIBUTES_TABLE = "Attributes";
+  private static final String PRODUCTS_TABLE = "Products";
+  private static final String PRODUCTS_OFFERS = "Products_Offers";
+  private static final int DATABASE_VERSION = 6;
   
   /**
    * Database helper class
@@ -73,7 +88,9 @@ public class SDroidDb {
 
       // Create tables
       db.execSQL(CREATE_OFFERS_TABLE);
-      db.execSQL(CREATE_TAGS_TABLE);
+      db.execSQL(CREATE_PRODUCTS_TABLE);
+      db.execSQL(CREATE_ATTRIBUTES_TABLE);
+      db.execSQL(CREATE_PRODUCT_OFFERS);
     }
 
     @Override
@@ -81,7 +98,9 @@ public class SDroidDb {
       Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
               + newVersion + ", which will destroy all old data");
       db.execSQL("DROP TABLE IF EXISTS " + OFFERS_TABLE);
-      db.execSQL("DROP TABLE IF EXISTS " + TAGS_TABLE);
+      db.execSQL("DROP TABLE IF EXISTS " + PRODUCTS_TABLE);
+      db.execSQL("DROP TABLE IF EXISTS " + PRODUCTS_OFFERS);
+      db.execSQL("DROP TABLE IF EXISTS " + ATTRIBUTES_TABLE);
       onCreate(db);
     }
   }
@@ -112,28 +131,41 @@ public class SDroidDb {
     mDbHelper.close();
   }
   
-  public long createOffer(String productName) {
+  public long createProduct(String productName) {
+    ContentValues cvs = new ContentValues();
+    cvs.put(KEY_PRODUCTS_PRODUCT_NAME, productName);
+    return mDb.insertOrThrow(PRODUCTS_TABLE, null, cvs);
+  }
+  
+  public long createOffer(long productId, String summary) {
     // Create a set of values to insert into the database
     // android's SQLiteDatabase.insert requires these to be in the form
     // of ContentValues
-	  ContentValues offerTableValues = new ContentValues();
-	  offerTableValues.put(KEY_OFFERS_PRODUCT_NAME, productName);
+	  ContentValues cvsOffers = new ContentValues();
+	  ContentValues cvsContect = new ContentValues();
 	  
-	  return mDb.insert(OFFERS_TABLE, null, offerTableValues);
+	  cvsOffers.put(KEY_OFFER_SUM, summary);
+	  long offerId = mDb.insert(OFFERS_TABLE, null, cvsOffers);
+	  
+	  cvsContect.put(KEY_PRODUCT_ID, productId);
+	  cvsContect.put(KEY_OFFER_ID, offerId);
+	  mDb.insert(PRODUCTS_OFFERS, null, cvsContect);
+	  
+	  return offerId;
   }
   
-  public long addTag(String pred, String val, long offer) {
+  public long addAttribute(String pred, String val, long offer) {
 	  ContentValues tagTableValues = new ContentValues();
-	  tagTableValues.put(KEY_TAGS_PREDICATE, pred);
-	  tagTableValues.put(KEY_TAGS_VALUE, val);
-	  tagTableValues.put(KEY_OFFERS_ID, offer);
+	  tagTableValues.put(KEY_ATTRIBUTES_PREDICATE, pred);
+	  tagTableValues.put(KEY_ATTRIBUTES_VALUE, val);
+	  tagTableValues.put(KEY_OFFER_ID, offer);
 	  
-	  return mDb.insert(TAGS_TABLE, null, tagTableValues);
+	  return mDb.insert(ATTRIBUTES_TABLE, null, tagTableValues);
   }
   
   public boolean deleteOffer(long offer_id) {
-    int del_tags = mDb.delete(TAGS_TABLE, KEY_TAG_FOREIGN + "=" + offer_id, null);
-    int del_offer = mDb.delete(OFFERS_TABLE, KEY_OFFERS_ID + "=" + offer_id, null);
+    int del_tags = mDb.delete(ATTRIBUTES_TABLE, KEY_OFFER_ID + "=" + offer_id, null);
+    int del_offer = mDb.delete(OFFERS_TABLE, KEY_OFFER_ID + "=" + offer_id, null);
     
     if ((del_tags > 0) && (del_offer > 0)) 
       return true;
@@ -153,22 +185,37 @@ public class SDroidDb {
    */
   public boolean updateOffer(String newProdName, long rowId) {
     ContentValues UpdatedOfferVals = new ContentValues();
-    UpdatedOfferVals.put(KEY_OFFERS_PRODUCT_NAME, newProdName);
+    UpdatedOfferVals.put(KEY_PRODUCTS_PRODUCT_NAME, newProdName);
     return mDb.update(OFFERS_TABLE, UpdatedOfferVals, 
-        KEY_OFFERS_ID + "=" + rowId, null) > 0;
+        KEY_OFFER_ID + "=" + rowId, null) > 0;
   }
   
   public void updateTag() {
     
   }
   
+  public Cursor findOffers(Long productID) {
+    String search = "SELECT " + SDroidDb.OFFERS_TABLE + ".*" +
+                    " FROM " + SDroidDb.OFFERS_TABLE + ", " + SDroidDb.PRODUCTS_OFFERS + 
+                    " WHERE " + SDroidDb.PRODUCTS_OFFERS + "." + SDroidDb.KEY_PRODUCT_ID + "=?" +
+                    " AND " + SDroidDb.PRODUCTS_OFFERS + "." + SDroidDb.KEY_OFFER_ID +
+                    "=" + SDroidDb.OFFERS_TABLE + "." + SDroidDb.KEY_ID;
+    String[] args = new String[] { productID.toString() };
+    return mDb.rawQuery(search, args);
+  }
+  
   public Cursor fetchAllOffers() {
     return mDb.query(OFFERS_TABLE, 
-                     new String[] {KEY_OFFERS_ID, KEY_OFFERS_PRODUCT_NAME}, 
+                     new String[] {KEY_ID, KEY_OFFER_SUM}, 
                      null, null, null, null, null);
   }
   
-  public void fetchTags() {
+  public Cursor fetchAllProducts() {
+    return mDb.query(PRODUCTS_TABLE, new String[] {KEY_ID, KEY_PRODUCTS_PRODUCT_NAME},
+        null, null, null, null, null);
+  }
+  
+  public void fetchAttributes() {
     
   }
 }
