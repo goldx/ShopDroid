@@ -1,5 +1,9 @@
 package griffib.shopdroid;
 
+import griffib.shopdroid.lists.ProductsList;
+
+import com.google.android.maps.Projection;
+
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +25,7 @@ public class SDroidTabs extends TabActivity {
     
     TabHost tabs = getTabHost();
     tabs.addTab(tabs.newTabSpec("Tab1").setIndicator("Database").
-                setContent(new Intent(this, DatabaseActivity.class)));
+                setContent(new Intent(this, ProductsList.class)));
     tabs.addTab(tabs.newTabSpec("Tab2").setIndicator("Messaging").
                 setContent(new Intent(this, ShopDroid.class)));
     

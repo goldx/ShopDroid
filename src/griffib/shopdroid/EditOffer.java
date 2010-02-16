@@ -13,7 +13,8 @@ import android.widget.LinearLayout;
 
 public class EditOffer extends Activity {
 
-  private EditText productName;
+  private EditText summary;
+  private long productId;
   
   /** Called when activity is first created */
   @Override
@@ -21,24 +22,18 @@ public class EditOffer extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.edit_offer);
     
-    productName = (EditText) findViewById(R.id.product_name);
+    summary = (EditText) findViewById(R.id.offer_summary);
     
     // Set up buttons
     Button confirmButton = (Button) findViewById(R.id.btn_done);
     Button cancelButton = (Button) findViewById(R.id.btn_discard);
  //   ImageButton addAttrButton = (ImageButton) findViewById(R.id.add_attr);
     
-    
-    // If editing an entry - get and set up current values
+    // Get product ID
     Bundle currentVals = getIntent().getExtras();
     if (currentVals != null) {
-      String currentProductName = 
-        currentVals.getString(SDroidDb.KEY_OFFERS_PRODUCT_NAME);
-      
-      // Set the product name
-      if (currentProductName != null) {
-        productName.setText(currentProductName);
-      }
+      if ((Long) currentVals.getLong(SDroidDb.KEY_ID) != null)
+        productId = currentVals.getLong(SDroidDb.KEY_ID);
     }
     
     // Confirm new offer or edit
@@ -71,8 +66,10 @@ public class EditOffer extends Activity {
       public void onClick(View v) {
         Bundle bundle = new Bundle();
         
-        bundle.putString(SDroidDb.KEY_OFFERS_PRODUCT_NAME,
-                         productName.getText().toString());
+        bundle.putString(SDroidDb.KEY_OFFER_SUM,
+                         summary.getText().toString());
+        
+        bundle.putLong(SDroidDb.KEY_ID, productId);
         
         // Build arrays of attributes
         String[] tagsAttrName = new String[5];
@@ -90,8 +87,8 @@ public class EditOffer extends Activity {
           tagsAttrVal[i] = et.getText().toString();
         }
         
-        bundle.putStringArray(SDroidDb.KEY_TAGS_PREDICATE, tagsAttrName);
-        bundle.putStringArray(SDroidDb.KEY_TAGS_VALUE, tagsAttrVal);
+        bundle.putStringArray(SDroidDb.KEY_ATTRIBUTES_PREDICATE, tagsAttrName);
+        bundle.putStringArray(SDroidDb.KEY_ATTRIBUTES_VALUE, tagsAttrVal);
                                      
         Intent i = new Intent();
         i.putExtras(bundle);
