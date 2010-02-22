@@ -1,14 +1,14 @@
 package griffib.shopdroid;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 
 public class SDroidSettings extends PreferenceActivity {
 
+  private final static String KEY_TAG_LIST = "tag_list";
   /*
-   * (non-Javadoc)
-   * @see android.app.Activity#onCreate(android.os.Bundle)
-   * 
    * Called when activity is first ran
    */
   @Override
@@ -18,6 +18,9 @@ public class SDroidSettings extends PreferenceActivity {
     addPreferencesFromResource(R.xml.settings);    
   }
   
-  
+  public String getTags(Context ctx) {
+    return PreferenceManager.getDefaultSharedPreferences(ctx)
+           .getString(KEY_TAG_LIST, null);
+  }
 
 }

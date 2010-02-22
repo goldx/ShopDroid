@@ -4,7 +4,7 @@ import griffib.shopdroid.EditOffer;
 import griffib.shopdroid.EditProduct;
 import griffib.shopdroid.R;
 import griffib.shopdroid.SDroidDb;
-import griffib.shopdroid.SDroidServer;
+import griffib.shopdroid.comms.SDroidServer;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;

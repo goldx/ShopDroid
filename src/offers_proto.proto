@@ -1,0 +1,17 @@
+package griffib.shopdroid.comms;
+
+message Offer { 
+  optional string product = 1;
+  optional string offer_sum = 2;
+  
+  message Attribute {
+    optional string predicate = 1;
+    optional string value = 2;
+  }
+  
+  repeated Attribute attribute = 3;
+}
+
+message Offers {
+  repeated Offer offer = 1;
+}

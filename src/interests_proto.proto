@@ -1,0 +1,9 @@
+package griffib.shopdroid
+
+message Interests {
+  message Interest {
+    optional string interest = 1;
+  }
+  
+  repeated Interest interests = 1;
+}

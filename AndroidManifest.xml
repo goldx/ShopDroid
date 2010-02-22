@@ -18,7 +18,7 @@ android:versionCode="1" android:versionName="alpha_1.0">
     <activity android:name=".EditProduct"></activity>
     
     <!-- Services -->
-    <service android:name=".SDroidServer"></service>
+    <service android:name=".comms.SDroidServer"></service>
     
   </application>
   <uses-sdk android:minSdkVersion="4" />
