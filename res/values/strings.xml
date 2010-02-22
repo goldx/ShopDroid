@@ -10,7 +10,7 @@
   <string name="discard">Discard</string>
   
   
-  <!-- Context Menu Strings - ProductsList -->
+  <!-- Menu Strings - ProductsList -->
   <string name="menu_add">Add Offer</string>
   <string name="menu_add_product">Add Product</string>
   <string name="menu_delete">Delete Item</string>
@@ -19,8 +19,9 @@
   <string name="menu_sync">Share</string>
   <string name="menu_change_list">Display Offers/Products</string>
   <string name="menu_find">Find Offers</string>
+  <string name="menu_export">Export DB</string>
   
-  <!-- Context Menu Strings - OffersList -->
+  <!-- Menu Strings - OffersList -->
   <string name="menu_back">Back</string>
   <string name="menu_view_all">View All Offers</string>
   
