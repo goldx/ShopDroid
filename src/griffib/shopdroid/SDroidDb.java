@@ -216,7 +216,9 @@ public class SDroidDb {
   }
   
   public Cursor fetchAttributes(Long offerID) {
-    String search = "SELECT ";
+    String search = "SELECT predicate, vlaue " +
+    		            "FROM " + SDroidDb.ATTRIBUTES_TABLE + " " +
+    		            "WHERE " + SDroidDb.KEY_OFFER_ID + "=?";
     String[] selectionArgs = new String[] { offerID.toString() };
     return mDb.rawQuery(search, selectionArgs);
   }

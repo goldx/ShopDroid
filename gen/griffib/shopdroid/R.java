@@ -55,33 +55,34 @@ public final class R {
         public static final int discard=0x7f050003;
         /**  Edit Offer 
          */
-        public static final int edit_offer1=0x7f05000e;
-        public static final int edit_subtitle=0x7f05000f;
-        /**  Context Menu Strings - ProductsList 
+        public static final int edit_offer1=0x7f05000f;
+        public static final int edit_subtitle=0x7f050010;
+        /**  Menu Strings - ProductsList 
          */
         public static final int menu_add=0x7f050004;
         public static final int menu_add_product=0x7f050005;
-        /**  Context Menu Strings - OffersList 
+        /**  Menu Strings - OffersList 
          */
-        public static final int menu_back=0x7f05000c;
+        public static final int menu_back=0x7f05000d;
         public static final int menu_change_list=0x7f05000a;
         public static final int menu_delete=0x7f050006;
         public static final int menu_edit=0x7f050007;
+        public static final int menu_export=0x7f05000c;
         public static final int menu_find=0x7f05000b;
         public static final int menu_settings=0x7f050008;
         public static final int menu_sync=0x7f050009;
-        public static final int menu_view_all=0x7f05000d;
+        public static final int menu_view_all=0x7f05000e;
         public static final int msg_sent=0x7f050001;
         /**  Buttons 
          */
         public static final int ok=0x7f050002;
-        public static final int pref_notifications_summary=0x7f050011;
+        public static final int pref_notifications_summary=0x7f050012;
         /**  Preferences and settings 
          */
-        public static final int pref_notifications_title=0x7f050010;
+        public static final int pref_notifications_title=0x7f050011;
         /**  Errors and Warnings 
          */
-        public static final int sql_warning=0x7f050012;
+        public static final int sql_warning=0x7f050013;
     }
     public static final class xml {
         public static final int settings=0x7f040000;

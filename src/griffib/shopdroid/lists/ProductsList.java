@@ -41,6 +41,7 @@ public class ProductsList extends SDroidList {
   private static final int SETTINGS_ID = Menu.FIRST + 5;
   private static final int MENU_ADD_PRODUCT = Menu.FIRST + 6;
   private static final int FIND_OFFERS = Menu.FIRST + 7;
+  private static final int EXPORT_ID = Menu.FIRST +8;
   
   
   private SDroidDb dbHelper;
@@ -79,6 +80,8 @@ public class ProductsList extends SDroidList {
         .setIcon(android.R.drawable.ic_menu_add);
     menu.add(0, SYNC_ID, 0, R.string.menu_sync)
         .setIcon(android.R.drawable.ic_menu_share);
+    menu.add(Menu.NONE, EXPORT_ID, Menu.NONE, R.string.menu_export)
+        .setIcon(android.R.drawable.ic_menu_save);
     menu.add(0, DISPLAY_ID, 0, R.string.menu_change_list)
         .setIcon(android.R.drawable.ic_menu_rotate);
     menu.add(0, SETTINGS_ID, 0, R.string.menu_settings)
@@ -99,6 +102,9 @@ public class ProductsList extends SDroidList {
       createNewProduct();
     case SYNC_ID:
       sync();
+      return true;
+    case EXPORT_ID:
+      export();
       return true;
     case DISPLAY_ID:
       Intent i = new Intent(this, OffersList.class);
