@@ -7,17 +7,10 @@
 			android:title="@string/pref_notifications_title"
 			android:summary="@string/pref_notifications_summary"
 			android:defaultValue="true" />
-	</PreferenceCategory>
-	<PreferenceCategory android:title="Tags">
-		<PreferenceScreen
-			android:key="tags"
-			android:title="Tags"
-			android:summary="Manage your subcriptions">
-				<CheckBoxPreference
-				android:key="checkbox2"
-				android:title="Another Checkbox"
-				android:summary="On. Off. It really doesn't matter."
-				/>
-		</PreferenceScreen>
+		<EditTextPreference
+			android:key="tag_list"
+			android:title="Tag List"
+			android:summary="List the products you're interested in, seperate products with commas."
+			/>
 	</PreferenceCategory>
 </PreferenceScreen>

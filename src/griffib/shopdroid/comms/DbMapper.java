@@ -1,4 +1,4 @@
-package griffib.shopdroid;
+package griffib.shopdroid.comms;
 
 
 
