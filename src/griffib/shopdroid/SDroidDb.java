@@ -216,7 +216,7 @@ public class SDroidDb {
   }
   
   public Cursor fetchAttributes(Long offerID) {
-    String search = "SELECT ;
+    String search = "SELECT ";
     String[] selectionArgs = new String[] { offerID.toString() };
     return mDb.rawQuery(search, selectionArgs);
   }
