@@ -9,6 +9,13 @@ import android.os.Bundle;
 public class SDroidList extends ListActivity {
   
   public static final String SEARCH = "s";
+  public static final String EDIT = "e";
+  
+
+  protected static final int NEW_OFFER = 0;
+  protected static final int EDIT_OFFER = 1;
+  protected static final int NEW_PRODUCT = 2;
+  protected static final int DIALOG_SQL_WARNING = 0;
   
   private SDroidDb dbHelper;
   

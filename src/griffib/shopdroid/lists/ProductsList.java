@@ -4,7 +4,7 @@ import griffib.shopdroid.EditOffer;
 import griffib.shopdroid.EditProduct;
 import griffib.shopdroid.R;
 import griffib.shopdroid.SDroidDb;
-import griffib.shopdroid.SDroidServer;
+import griffib.shopdroid.comms.SDroidServer;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -29,6 +29,9 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
  */
 public class ProductsList extends SDroidList {
   
+  
+  public static final String KEY_ATTR_NUM = "attr_num";
+  
   // Menu items
   private static final int MENU_ADD = Menu.FIRST;
   private static final int DELETE_ID = Menu.FIRST + 1;
@@ -39,12 +42,6 @@ public class ProductsList extends SDroidList {
   private static final int MENU_ADD_PRODUCT = Menu.FIRST + 6;
   private static final int FIND_OFFERS = Menu.FIRST + 7;
   
-  
-  
-  private static final int NEW_OFFER = 0;
-  private static final int EDIT_OFFER = 1;
-  private static final int NEW_PRODUCT = 2;
-  private static final int DIALOG_SQL_WARNING = 0;
   
   private SDroidDb dbHelper;
   private Cursor cMain;

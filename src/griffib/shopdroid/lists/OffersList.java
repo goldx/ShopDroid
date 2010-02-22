@@ -1,12 +1,18 @@
 package griffib.shopdroid.lists;
 
+import griffib.shopdroid.EditOffer;
 import griffib.shopdroid.R;
 import griffib.shopdroid.SDroidDb;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.SimpleCursorAdapter;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class OffersList extends SDroidList {
 
@@ -14,9 +20,12 @@ public class OffersList extends SDroidList {
   private static final int MENU_VIEW_ALL = Menu.FIRST+1;
   private static final int MENU_SHARE = Menu.FIRST+2;
   private static final int MENU_SETTINGS = Menu.FIRST+3;
+  private static final int MENU_EDIT = Menu.FIRST+4;
   
   private SDroidDb dbHelper;
   private Cursor cMain;
+  
+  private Long productID = null;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +35,16 @@ public class OffersList extends SDroidList {
     dbHelper = getDbHelper();
     boolean search;
     
+ // Setup a context menu
+    registerForContextMenu(getListView());
+    
     Bundle extras = getIntent().getExtras();
     if (extras != null) {
       search = extras.getBoolean(SEARCH);
-      if (search)
-        fillData(extras.getLong(SDroidDb.KEY_PRODUCT_ID), search);
+      if (search) {
+        productID = extras.getLong(SDroidDb.KEY_PRODUCT_ID);
+        fillData(productID, search);
+      }
       else
         fillData(null, search);
     }
@@ -67,7 +81,33 @@ public class OffersList extends SDroidList {
     return super.onOptionsItemSelected(item);
   }
   
+  /*
+   * Context Menu
+   */
   
+  @Override
+  public void onCreateContextMenu(ContextMenu menu, View v,
+      ContextMenuInfo menuInfo) {
+    super.onCreateContextMenu(menu, v, menuInfo);
+    menu.add(0, MENU_EDIT, 0, R.string.menu_edit);
+  }
+ 
+  @Override
+  public boolean onContextItemSelected(MenuItem item) {
+    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+    Intent i;
+    
+    switch (item.getItemId()) {
+      case MENU_EDIT:
+        i = new Intent(this, EditOffer.class);
+        i.putExtra(SDroidDb.KEY_ID, info.id);
+        i.putExtra(SDroidDb.KEY_PRODUCT_ID, productID);
+        i.putExtra(SDroidList.EDIT, true);
+        startActivityForResult(i, EDIT_OFFER);
+      break;
+    }
+    return super.onContextItemSelected(item);
+  }
 
   private void fillData(Long productID, boolean search) {
     String[] from = new String[] { SDroidDb.KEY_OFFER_SUM };;
@@ -86,6 +126,7 @@ public class OffersList extends SDroidList {
     setListAdapter(localOffers);
   }
 
+  
 
   
 
