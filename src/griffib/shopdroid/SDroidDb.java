@@ -23,7 +23,7 @@ public class SDroidDb {
   
   public static final String KEY_ID = "_id";
   public static final String KEY_PRODUCT_ID = "product_id";
-  public static final String KEY_PRODUCTS_PRODUCT_NAME = "product_name";
+  public static final String KEY_PRODUCT_NAME = "product_name";
   public static final String KEY_OFFER_ID = "offer_id";
   public static final String KEY_ATTRIBUTES_PREDICATE = "predicate";
   public static final String KEY_ATTRIBUTES_VALUE = "value";
@@ -133,7 +133,7 @@ public class SDroidDb {
   
   public long createProduct(String productName) {
     ContentValues cvs = new ContentValues();
-    cvs.put(KEY_PRODUCTS_PRODUCT_NAME, productName);
+    cvs.put(KEY_PRODUCT_NAME, productName);
     return mDb.insertOrThrow(PRODUCTS_TABLE, null, cvs);
   }
   
@@ -185,7 +185,7 @@ public class SDroidDb {
    */
   public boolean updateOffer(String newProdName, long rowId) {
     ContentValues UpdatedOfferVals = new ContentValues();
-    UpdatedOfferVals.put(KEY_PRODUCTS_PRODUCT_NAME, newProdName);
+    UpdatedOfferVals.put(KEY_PRODUCT_NAME, newProdName);
     return mDb.update(OFFERS_TABLE, UpdatedOfferVals, 
         KEY_OFFER_ID + "=" + rowId, null) > 0;
   }
@@ -195,11 +195,11 @@ public class SDroidDb {
   }
   
   public Cursor findOffers(Long productID) {
-    String search = "SELECT " + SDroidDb.OFFERS_TABLE + ".*" +
-                    " FROM " + SDroidDb.OFFERS_TABLE + ", " + SDroidDb.PRODUCTS_OFFERS + 
-                    " WHERE " + SDroidDb.PRODUCTS_OFFERS + "." + SDroidDb.KEY_PRODUCT_ID + "=?" +
-                    " AND " + SDroidDb.PRODUCTS_OFFERS + "." + SDroidDb.KEY_OFFER_ID +
-                    "=" + SDroidDb.OFFERS_TABLE + "." + SDroidDb.KEY_ID;
+    String search = "SELECT " + OFFERS_TABLE + ".*" +
+                    " FROM " + OFFERS_TABLE + ", " + PRODUCTS_OFFERS + 
+                    " WHERE " + PRODUCTS_OFFERS + "." + KEY_PRODUCT_ID + "=?" +
+                    " AND " + PRODUCTS_OFFERS + "." + KEY_OFFER_ID +
+                    "=" + OFFERS_TABLE + "." + KEY_ID;
     String[] args = new String[] { productID.toString() };
     return mDb.rawQuery(search, args);
   }
@@ -211,15 +211,41 @@ public class SDroidDb {
   }
   
   public Cursor fetchAllProducts() {
-    return mDb.query(PRODUCTS_TABLE, new String[] {KEY_ID, KEY_PRODUCTS_PRODUCT_NAME},
+    return mDb.query(PRODUCTS_TABLE, new String[] {KEY_ID, KEY_PRODUCT_NAME},
         null, null, null, null, null);
   }
   
   public Cursor fetchAttributes(Long offerID) {
     String search = "SELECT predicate, vlaue " +
-    		            "FROM " + SDroidDb.ATTRIBUTES_TABLE + " " +
-    		            "WHERE " + SDroidDb.KEY_OFFER_ID + "=?";
+    		            "FROM " + ATTRIBUTES_TABLE + " " +
+    		            "WHERE " + KEY_OFFER_ID + "=?";
     String[] selectionArgs = new String[] { offerID.toString() };
     return mDb.rawQuery(search, selectionArgs);
+  }
+  
+  public Cursor fetchAttributes(String summary) {
+    String search = "SELECT predicate, vlaue " +
+                    "FROM " + ATTRIBUTES_TABLE + " " +
+                    "WHERE " + KEY_OFFER_SUM + "=?";
+    String[] selectionArgs = new String[] { summary };
+    return mDb.rawQuery(search, selectionArgs);
+  }
+  
+  public String getProductNameFromOffer(Long offerID) {
+    String query = "SELECT " + KEY_PRODUCT_NAME + " " +
+                   "FROM " + PRODUCTS_TABLE + ", " + PRODUCTS_OFFERS + " " +
+                   "WHERE " + PRODUCTS_OFFERS+"."+KEY_OFFER_ID +"=? " +
+                   "AND " + PRODUCTS_OFFERS+"."+KEY_PRODUCT_ID+"=" +
+                   PRODUCTS_TABLE+"."+KEY_ID;
+    String[] args = new String[] { offerID.toString() };
+    Cursor c = mDb.rawQuery(query, args);
+    c.moveToFirst();
+    if (!c.isAfterLast()) {
+      int columnIndex = c.getColumnIndex(KEY_PRODUCT_NAME);
+      String productName = c.getString(columnIndex);
+      c.close();
+      return productName;
+    }
+    return null;
   }
 }

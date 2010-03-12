@@ -185,8 +185,8 @@ public class ProductsList extends SDroidList {
     c.moveToPosition(position);
     Intent i = new Intent(this, EditOffer.class);
     i.putExtra(SDroidDb.KEY_ID, id);
-    i.putExtra(SDroidDb.KEY_PRODUCTS_PRODUCT_NAME, c.getString(
-        c.getColumnIndexOrThrow(SDroidDb.KEY_PRODUCTS_PRODUCT_NAME)));
+    i.putExtra(SDroidDb.KEY_PRODUCT_NAME, c.getString(
+        c.getColumnIndexOrThrow(SDroidDb.KEY_PRODUCT_NAME)));
     startActivityForResult(i, EDIT_OFFER);
   }
   
@@ -220,13 +220,13 @@ public class ProductsList extends SDroidList {
         rowId = extras.getLong(SDroidDb.KEY_OFFER_ID);
         if (rowId != null) {
           String newProdName = extras
-              .getString(SDroidDb.KEY_PRODUCTS_PRODUCT_NAME);
+              .getString(SDroidDb.KEY_PRODUCT_NAME);
           dbHelper.updateOffer(newProdName, rowId);
         }
         fillData();
         break;
       case NEW_PRODUCT:
-        String productName = extras.getString(SDroidDb.KEY_PRODUCTS_PRODUCT_NAME);
+        String productName = extras.getString(SDroidDb.KEY_PRODUCT_NAME);
         try {
         dbHelper.createProduct(productName);
         } catch (SQLiteConstraintException e) {
@@ -277,7 +277,7 @@ public class ProductsList extends SDroidList {
   private void fillData() {
           
     cMain = dbHelper.fetchAllProducts();
-    String[] from = new String[] { SDroidDb.KEY_PRODUCTS_PRODUCT_NAME };
+    String[] from = new String[] { SDroidDb.KEY_PRODUCT_NAME };
         
     startManagingCursor(cMain);
         

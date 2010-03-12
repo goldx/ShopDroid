@@ -12,7 +12,6 @@ android:versionCode="1" android:versionName="alpha_1.0">
       </intent-filter>
     </activity>
     <activity android:name=".lists.OffersList"></activity>
-    <activity android:name=".ShopDroid"></activity>
     <activity android:name=".EditOffer"></activity>
     <activity android:name=".SDroidSettings"></activity>
     <activity android:name=".EditProduct"></activity>
