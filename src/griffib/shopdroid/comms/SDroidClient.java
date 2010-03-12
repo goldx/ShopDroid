@@ -1,59 +1,89 @@
 package griffib.shopdroid.comms;
 
-import java.io.*;
-import java.net.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
-import android.util.Log;
+import android.content.Context;
+import android.database.Cursor;
+import android.provider.OpenableColumns;
+import griffib.shopdroid.SDroidDb;
+import griffib.shopdroid.comms.OffersProto.Offer;
+import griffib.shopdroid.comms.OffersProto.Offers;
+import griffib.shopdroid.comms.OffersProto.Offer.Attribute;
 
+/**
+ * Parts of this code are inspired by Google's Protocol Buffer java tutorial
+ * available at http://code.google.com/apis/protocolbuffers/docs/javatutorial.html
+ * @author Ben Griffiths
+ *
+ */
 public class SDroidClient {
+  
+  private final static String MSG_FILE = "sdroidmsg";
 
-  private final String msg;
-  private final String server;
+  private SDroidDb db;
+  private Context ctx;
+
+  public SDroidClient(SDroidDb db, Context ctx) {
+    this.db = db;
+    this.ctx = ctx;
+  }
   
-  Socket SDClient = null;
-  PrintWriter out = null;
-  BufferedReader in = null;
-  
-  /**
-   * Takes message to send and a server to send it to.
-   * @param msg, server
-   */
-  public SDroidClient(String msg, String server) {
-    this.msg = msg;
-    this.server = server;
-    try {
-      init();
-    } catch (IOException e) {
-      Log.e("Server", e.toString());
+  public void exportOffers() throws IOException {
+    Cursor offersCursor = db.fetchAllOffers();
+    offersCursor.moveToFirst();
+    Offers.Builder offers = Offers.newBuilder();
+    while (!offersCursor.isAfterLast()) {
+      String summary = offersCursor.getString(offersCursor.getColumnIndex(SDroidDb.KEY_OFFER_SUM));
+      long offerID = offersCursor.getLong(offersCursor.getColumnIndex(SDroidDb.KEY_ID));
+      String product = db.getProductNameFromOffer(offerID);
+      offers.addOffer(buildOffer(product, summary));
+      offersCursor.moveToNext();
     }
-  }
-  
-  /**
-   * Initialise the socket and i/o, called by constructor
-   * @throws IOException
-   */
-  private void init() throws IOException {
-    SDClient = new Socket(server, 1234);
-    out = new PrintWriter(SDClient.getOutputStream(), true);
-    in = new BufferedReader(new InputStreamReader(SDClient.getInputStream()));
-  }
-  
-  /**
-   * Sends the message then closes the connection.
-   */
-  public void send() {
-    //while (msg != null) {
-      out.println(msg);
-      System.out.println("Client TCP: Recieved: " + msg);
-    //}
     
-    //Message sent, close connection
+    // We've finished with the cursor, close it
+    offersCursor.close();
+    
+    // Write our message to file
     try {
-      out.close();
-      in.close();
-      SDClient.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+      FileOutputStream out = ctx.openFileOutput(MSG_FILE, 0);
+      offers.build().writeTo(out);
+    } catch (FileNotFoundException e) {
+      // It just hasn't been made yet...
+    } 
   }
+  
+  private Offer buildOffer(String product, String summary) {
+    // Build the offer from given parameters
+    Offer.Builder offer = Offer.newBuilder();
+    offer.setProduct(product);
+    offer.setOfferSum(summary);
+    
+    // Find the offers attributes and add them to the offer object
+    Cursor attrCursor = db.fetchAttributes(summary);
+    attrCursor.moveToFirst();
+    while (!attrCursor.isAfterLast()) {
+      String pred = attrCursor.getString(attrCursor.getColumnIndex(SDroidDb.KEY_ATTRIBUTES_PREDICATE));
+      String val = attrCursor.getString(attrCursor.getColumnIndex(SDroidDb.KEY_ATTRIBUTES_VALUE));
+      offer.addAttribute(buildAttribute(pred, val));
+    }
+    
+    // We've finished with the cursor, close it
+    attrCursor.close();
+    
+    return offer.build();
+  }
+  
+  private Attribute buildAttribute(String pred, String val) {
+    // Build an attribute from given parameters
+    Attribute.Builder attribute = Attribute.newBuilder();
+    attribute.setPredicate(pred);
+    attribute.setValue(val);
+    return attribute.build();
+  }
+  
+
 }

@@ -28,7 +28,7 @@ public class EditProduct extends Activity {
       public void onClick(View v) {
         Bundle bundle = new Bundle();
         
-        bundle.putString(SDroidDb.KEY_PRODUCTS_PRODUCT_NAME,
+        bundle.putString(SDroidDb.KEY_PRODUCT_NAME,
                          productField.getText().toString());
         
         Intent i = new Intent();
