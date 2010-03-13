@@ -3,12 +3,9 @@ package griffib.shopdroid.comms;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-
 import android.content.Context;
 import android.database.Cursor;
-import android.provider.OpenableColumns;
+import android.util.Log;
 import griffib.shopdroid.SDroidDb;
 import griffib.shopdroid.comms.OffersProto.Offer;
 import griffib.shopdroid.comms.OffersProto.Offers;
@@ -51,8 +48,12 @@ public class SDroidClient {
     try {
       FileOutputStream out = ctx.openFileOutput(MSG_FILE, 0);
       offers.build().writeTo(out);
+      out.close();
     } catch (FileNotFoundException e) {
-      // It just hasn't been made yet...
+      // It just hasn't been made yet... This shouldn't happen! openFileOutput
+      // makes the file if it isn't there... but if it does
+      Log.e("FileOutput", "File not found?!");
+      Log.e("FileOutput", e.getMessage());
     } 
   }
   

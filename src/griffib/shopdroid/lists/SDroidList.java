@@ -1,7 +1,10 @@
 package griffib.shopdroid.lists;
 
+import java.io.IOException;
+
 import griffib.shopdroid.SDroidDb;
 import griffib.shopdroid.SDroidSettings;
+import griffib.shopdroid.comms.SDroidClient;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ public class SDroidList extends ListActivity {
   protected static final int DIALOG_SQL_WARNING = 0;
   
   private SDroidDb dbHelper;
+  private SDroidClient client;
   
   private static final String DB_LOCAL_OFFERS = "Local_Offers";
 
@@ -25,13 +29,20 @@ public class SDroidList extends ListActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     
- // Get the local database
+    // Get the local database
     dbHelper = new SDroidDb(this);
     dbHelper.open(DB_LOCAL_OFFERS);
+    
+    // Start SDroidClient
+    client = new SDroidClient(dbHelper, this);
   }
   
   public SDroidDb getDbHelper() {
     return dbHelper;
+  }
+  
+  public SDroidClient getClient() {
+    return client;
   }
   
   protected void openPrefs() {
@@ -44,7 +55,12 @@ public class SDroidList extends ListActivity {
   }
   
   protected void export() {
-    
+    try {
+      client.exportOffers();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
   
 }

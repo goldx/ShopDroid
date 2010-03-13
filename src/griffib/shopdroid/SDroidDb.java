@@ -216,7 +216,7 @@ public class SDroidDb {
   }
   
   public Cursor fetchAttributes(Long offerID) {
-    String search = "SELECT predicate, vlaue " +
+    String search = "SELECT predicate, value " +
     		            "FROM " + ATTRIBUTES_TABLE + " " +
     		            "WHERE " + KEY_OFFER_ID + "=?";
     String[] selectionArgs = new String[] { offerID.toString() };
@@ -224,7 +224,7 @@ public class SDroidDb {
   }
   
   public Cursor fetchAttributes(String summary) {
-    String search = "SELECT predicate, vlaue " +
+    String search = "SELECT predicate, value " +
                     "FROM " + ATTRIBUTES_TABLE + " " +
                     "WHERE " + KEY_OFFER_SUM + "=?";
     String[] selectionArgs = new String[] { summary };
