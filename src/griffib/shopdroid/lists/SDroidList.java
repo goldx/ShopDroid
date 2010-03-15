@@ -51,7 +51,7 @@ public class SDroidList extends ListActivity {
   }
   
   protected void sync() {
-    
+    client.importOffers();
   }
   
   protected void export() {

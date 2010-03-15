@@ -103,6 +103,7 @@ public class ProductsList extends SDroidList {
       createNewProduct();
     case SYNC_ID:
       sync();
+      fillData();
       return true;
     case EXPORT_ID:
       export();

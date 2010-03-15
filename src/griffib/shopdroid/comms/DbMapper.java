@@ -1,5 +1,7 @@
 package griffib.shopdroid.comms;
 
+import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import griffib.shopdroid.SDroidDb;
 import griffib.shopdroid.comms.OffersProto.Offer;
 import griffib.shopdroid.comms.OffersProto.Offers;
@@ -32,9 +34,11 @@ public class DbMapper {
   /**
    * Call this function to perform the integration
    */
-  public void integrate() {
+  public void integrate() throws SQLException {
     for (Offer offer: pendingOffers.getOfferList()) {
       long productId = addProduct(offer.getProduct());
+      if (productId==-1)
+        throw new SQLException("There has been a contstaint problem");
       long offerId = addOffer(productId, offer.getOfferSum());
       for (Attribute attr: offer.getAttributeList()) {
         addAttr(attr.getPredicate(), attr.getValue(), offerId);
@@ -43,7 +47,16 @@ public class DbMapper {
   }
   
   private long addProduct(String name) {
-    return db.createProduct(name);
+    try { 
+      return db.createProduct(name); 
+    } catch (SQLiteConstraintException e) {
+      // The product must already exist!
+      long id = db.findProduct(name);
+      if (id!=-1) 
+        return id;
+      else
+        return -1;
+    }
   }
   
   private long addOffer(long productId, String summary) {

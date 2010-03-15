@@ -250,4 +250,17 @@ public class SDroidDb {
     }
     return null;
   }
+  
+  public long findProduct(String productName) {
+    Cursor c = mDb.query(PRODUCTS_TABLE, new String[] {KEY_ID, KEY_PRODUCT_NAME}, 
+        KEY_PRODUCT_NAME + "=?", new String[] { productName }, null, null, null);
+    c.moveToFirst();
+    if (!c.isAfterLast()) {
+      int columnIndex = c.getColumnIndex(KEY_ID);
+      long id = c.getLong(columnIndex);
+      c.close();
+      return id;
+    }
+    return -1;
+  }
 }
