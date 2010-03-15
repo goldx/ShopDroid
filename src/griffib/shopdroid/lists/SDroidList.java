@@ -18,6 +18,7 @@ public class SDroidList extends ListActivity {
   protected static final int NEW_OFFER = 0;
   protected static final int EDIT_OFFER = 1;
   protected static final int NEW_PRODUCT = 2;
+  protected static final int EDIT_PRODUCT = 3;
   protected static final int DIALOG_SQL_WARNING = 0;
   
   private SDroidDb dbHelper;

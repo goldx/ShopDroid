@@ -7,8 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+
 public class EditProduct extends Activity {
 
+  private long productId = -1;
+  
   EditText productField;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,20 @@ public class EditProduct extends Activity {
     Button btnOk = (Button) findViewById(R.id.btn_done);
     Button btnDiscard = (Button) findViewById(R.id.btn_discard);
     
+   
+    
+    Bundle extras = getIntent().getExtras();
+    String productName = null;
+    if (extras!=null) {
+      // Then we must be editing!
+      if((extras.getString(SDroidDb.KEY_PRODUCT_NAME)) != null)
+        productName = extras.getString(SDroidDb.KEY_PRODUCT_NAME);
+          
+      productField.setText(productName);
+      
+      if((Long)(extras.getLong(SDroidDb.KEY_ID)) != null)
+        productId = extras.getLong(SDroidDb.KEY_ID);
+    }
     
     // Ok button
     btnOk.setOnClickListener(new View.OnClickListener() {
@@ -30,6 +47,7 @@ public class EditProduct extends Activity {
         
         bundle.putString(SDroidDb.KEY_PRODUCT_NAME,
                          productField.getText().toString());
+        bundle.putLong(SDroidDb.KEY_ID, productId);
         
         Intent i = new Intent();
         i.putExtras(bundle);

@@ -137,6 +137,13 @@ public class SDroidDb {
     return mDb.insertOrThrow(PRODUCTS_TABLE, null, cvs);
   }
   
+  public boolean updateProduct(Long id, String productName) {
+    ContentValues cvs = new ContentValues();
+    cvs.put(KEY_PRODUCT_NAME, productName);
+    return mDb.update(PRODUCTS_TABLE, cvs, KEY_ID+"=?", 
+        new String[] { id.toString() }) > 0;
+  }
+  
   public long createOffer(long productId, String summary) {
     // Create a set of values to insert into the database
     // android's SQLiteDatabase.insert requires these to be in the form
@@ -164,36 +171,13 @@ public class SDroidDb {
   }
   
   public boolean deleteOffer(long offer_id) {
-    int del_tags = mDb.delete(ATTRIBUTES_TABLE, KEY_OFFER_ID + "=" + offer_id, null);
-    int del_offer = mDb.delete(OFFERS_TABLE, KEY_OFFER_ID + "=" + offer_id, null);
-    
-    if ((del_tags > 0) && (del_offer > 0)) 
-      return true;
-    else
-      return false;
+    return false;
   }
   
-  public void removeTag() {
-    
-  }
-  
-  /**
-   * Update an offer. Offer to be updated is specified by the rowId.
-   * @param newProdName 
-   * @param rowId
-   * @return true if there was a successful update, else false.
-   */
   public boolean updateOffer(String newProdName, long rowId) {
-    ContentValues UpdatedOfferVals = new ContentValues();
-    UpdatedOfferVals.put(KEY_PRODUCT_NAME, newProdName);
-    return mDb.update(OFFERS_TABLE, UpdatedOfferVals, 
-        KEY_OFFER_ID + "=" + rowId, null) > 0;
+    return false;
   }
-  
-  public void updateTag() {
     
-  }
-  
   public Cursor findOffers(Long productID) {
     String search = "SELECT " + OFFERS_TABLE + ".*" +
                     " FROM " + OFFERS_TABLE + ", " + PRODUCTS_OFFERS + 
@@ -262,5 +246,18 @@ public class SDroidDb {
       return id;
     }
     return -1;
+  }
+  
+  public String getProductName(Long id) {
+    Cursor c = mDb.query(PRODUCTS_TABLE, new String[] { KEY_ID, KEY_PRODUCT_NAME }, 
+        KEY_ID+"=?", new String[] { id.toString() }, null, null, null);
+    c.moveToFirst();
+    if (!c.isAfterLast()) {
+      int columnIndex = c.getColumnIndex(KEY_PRODUCT_NAME);
+      String name = c.getString(columnIndex);
+      c.close();
+      return name;
+    }
+    return null;
   }
 }

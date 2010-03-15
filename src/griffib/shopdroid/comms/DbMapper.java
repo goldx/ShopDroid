@@ -38,7 +38,7 @@ public class DbMapper {
     for (Offer offer: pendingOffers.getOfferList()) {
       long productId = addProduct(offer.getProduct());
       if (productId==-1)
-        throw new SQLException("There has been a contstaint problem");
+        throw new SQLException("There has been a contstraint problem");
       long offerId = addOffer(productId, offer.getOfferSum());
       for (Attribute attr: offer.getAttributeList()) {
         addAttr(attr.getPredicate(), attr.getValue(), offerId);

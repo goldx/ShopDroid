@@ -170,6 +170,11 @@ public class ProductsList extends SDroidList {
       
     // Editing an item from the Db
     case EDIT_ID:
+      String prodcutName = dbHelper.getProductName(info.id);
+      i = new Intent(this, EditProduct.class);
+      i.putExtra(SDroidDb.KEY_PRODUCT_NAME, prodcutName);
+      i.putExtra(SDroidDb.KEY_ID, info.id);
+      startActivityForResult(i, EDIT_PRODUCT);
       return true;
     }
     return super.onContextItemSelected(item);
@@ -185,11 +190,10 @@ public class ProductsList extends SDroidList {
     super.onListItemClick(l, v, position, id);
     Cursor c = cMain;
     c.moveToPosition(position);
-    Intent i = new Intent(this, EditOffer.class);
-    i.putExtra(SDroidDb.KEY_ID, id);
-    i.putExtra(SDroidDb.KEY_PRODUCT_NAME, c.getString(
-        c.getColumnIndexOrThrow(SDroidDb.KEY_PRODUCT_NAME)));
-    startActivityForResult(i, EDIT_OFFER);
+    Intent i = new Intent(this, OffersList.class);
+    i.putExtra(SDroidDb.KEY_PRODUCT_ID, id);
+    i.putExtra(SEARCH, true);
+    startActivity(i);
   }
   
   @Override
@@ -201,6 +205,8 @@ public class ProductsList extends SDroidList {
     if (resultCode != RESULT_CANCELED) {
       Bundle extras = data.getExtras();
       Long rowId;
+      long id;
+      String productName;
       switch(requestCode) {
       case NEW_OFFER:
         Long productId = extras.getLong(SDroidDb.KEY_ID);
@@ -218,22 +224,19 @@ public class ProductsList extends SDroidList {
         
         fillData();
         break;
-      case EDIT_OFFER:
-        rowId = extras.getLong(SDroidDb.KEY_OFFER_ID);
-        if (rowId != null) {
-          String newProdName = extras
-              .getString(SDroidDb.KEY_PRODUCT_NAME);
-          dbHelper.updateOffer(newProdName, rowId);
-        }
-        fillData();
-        break;
       case NEW_PRODUCT:
-        String productName = extras.getString(SDroidDb.KEY_PRODUCT_NAME);
+        productName = extras.getString(SDroidDb.KEY_PRODUCT_NAME);
         try {
         dbHelper.createProduct(productName);
         } catch (SQLiteConstraintException e) {
           showDialog(DIALOG_SQL_WARNING);
         }
+        break;
+      case EDIT_PRODUCT:
+        productName = extras.getString(SDroidDb.KEY_PRODUCT_NAME);
+        id = extras.getLong(SDroidDb.KEY_ID);
+        dbHelper.updateProduct(id, productName);
+        fillData();
         break;
       }
     }
