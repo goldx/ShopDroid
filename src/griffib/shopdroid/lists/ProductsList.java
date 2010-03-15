@@ -101,6 +101,7 @@ public class ProductsList extends SDroidList {
       return true;
     case MENU_ADD_PRODUCT:
       createNewProduct();
+      return true;
     case SYNC_ID:
       sync();
       fillData();
