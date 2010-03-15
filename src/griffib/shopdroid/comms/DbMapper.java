@@ -1,5 +1,7 @@
 package griffib.shopdroid.comms;
 
+import griffib.shopdroid.comms.OffersProto.Offers;
+
 
 
 
@@ -10,5 +12,26 @@ package griffib.shopdroid.comms;
  *
  */
 public class DbMapper {
+  
+  private Offers pendingOffers;
 
+  public DbMapper (Offers o) {
+    pendingOffers = o;
+  }
+  
+  public void integrate() {
+    
+  }
+  
+  private void addProduct(long id, String name) {
+    
+  }
+  
+  private void addOffer(long id, String sumarry) {
+    
+  }
+  
+  private void addAttr(long id, String pred, String val) {
+    
+  }
 }
