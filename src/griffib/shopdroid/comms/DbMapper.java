@@ -1,6 +1,9 @@
 package griffib.shopdroid.comms;
 
+import griffib.shopdroid.SDroidDb;
+import griffib.shopdroid.comms.OffersProto.Offer;
 import griffib.shopdroid.comms.OffersProto.Offers;
+import griffib.shopdroid.comms.OffersProto.Offer.Attribute;
 
 
 
@@ -14,24 +17,40 @@ import griffib.shopdroid.comms.OffersProto.Offers;
 public class DbMapper {
   
   private Offers pendingOffers;
-
-  public DbMapper (Offers o) {
+  private SDroidDb db;
+  
+/**
+ * 
+ * @param o The Offers object which is going to be integrated
+ * @param db The SDroidDb database that the offers will be integrated into
+ */
+  public DbMapper (Offers o, SDroidDb db) {
     pendingOffers = o;
+    this.db = db;
   }
   
+  /**
+   * Call this function to perform the integration
+   */
   public void integrate() {
-    
+    for (Offer offer: pendingOffers.getOfferList()) {
+      long productId = addProduct(offer.getProduct());
+      long offerId = addOffer(productId, offer.getOfferSum());
+      for (Attribute attr: offer.getAttributeList()) {
+        addAttr(attr.getPredicate(), attr.getValue(), offerId);
+      }
+    }
   }
   
-  private void addProduct(long id, String name) {
-    
+  private long addProduct(String name) {
+    return db.createProduct(name);
   }
   
-  private void addOffer(long id, String sumarry) {
-    
+  private long addOffer(long productId, String summary) {
+    return db.createOffer(productId, summary);
   }
   
-  private void addAttr(long id, String pred, String val) {
-    
+  private long addAttr(String pred, String val, long id) {
+    return db.addAttribute(pred, val, id);
   }
 }
