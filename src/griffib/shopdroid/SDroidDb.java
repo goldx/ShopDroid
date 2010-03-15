@@ -53,7 +53,7 @@ public class SDroidDb {
   private static final String CREATE_PRODUCTS_TABLE = 
                               "create table Products (" +
   		                        "_id integer primary key autoincrement," +
-  		                        "product_name text," +
+  		                        "product_name text COLLATE NOCASE," +
   		                        "UNIQUE (product_name) )";
   
   private static final String CREATE_ATTRIBUTES_TABLE = 
@@ -69,7 +69,7 @@ public class SDroidDb {
   private static final String ATTRIBUTES_TABLE = "Attributes";
   private static final String PRODUCTS_TABLE = "Products";
   private static final String PRODUCTS_OFFERS = "Products_Offers";
-  private static final int DATABASE_VERSION = 6;
+  private static final int DATABASE_VERSION = 7;
   
   /**
    * Database helper class
