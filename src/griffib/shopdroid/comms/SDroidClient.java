@@ -29,6 +29,20 @@ public class SDroidClient {
     this.ctx = ctx;
   }
   
+  public void importOffers() {
+    try {
+      Offers offers = Offers.parseFrom(ctx.openFileInput(MSG_FILE));
+      DbMapper map = new DbMapper(offers, db);
+      map.integrate();
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+  
   public void exportOffers() throws IOException {
     Cursor offersCursor = db.fetchAllOffers();
     offersCursor.moveToFirst();
