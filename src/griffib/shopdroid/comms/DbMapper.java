@@ -66,4 +66,8 @@ public class DbMapper {
   private long addAttr(String pred, String val, long id) {
     return db.addAttribute(pred, val, id);
   }
+  
+  public class MapperHelper {
+    
+  }
 }
