@@ -225,8 +225,10 @@ public class SDroidDb {
   
   public Cursor fetchAttributes(String summary) {
     String search = "SELECT predicate, value " +
-                    "FROM " + ATTRIBUTES_TABLE + " " +
-                    "WHERE " + KEY_OFFER_SUM + "=?";
+                    "FROM " + ATTRIBUTES_TABLE + ", " + OFFERS_TABLE + " " +
+                    "WHERE " + ATTRIBUTES_TABLE + "." + KEY_OFFER_ID + "=" +
+                    OFFERS_TABLE + "." + KEY_ID + " " +
+                    "AND " + OFFERS_TABLE + "." + KEY_OFFER_SUM + "=?";
     String[] selectionArgs = new String[] { summary };
     return mDb.rawQuery(search, selectionArgs);
   }

@@ -70,6 +70,7 @@ public class SDroidClient {
       String pred = attrCursor.getString(attrCursor.getColumnIndex(SDroidDb.KEY_ATTRIBUTES_PREDICATE));
       String val = attrCursor.getString(attrCursor.getColumnIndex(SDroidDb.KEY_ATTRIBUTES_VALUE));
       offer.addAttribute(buildAttribute(pred, val));
+      attrCursor.moveToNext();
     }
     
     // We've finished with the cursor, close it
