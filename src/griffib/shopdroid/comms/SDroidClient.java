@@ -3,6 +3,15 @@ package griffib.shopdroid.comms;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
@@ -19,6 +28,7 @@ import griffib.shopdroid.comms.OffersProto.Offer.Attribute;
  */
 public class SDroidClient {
   
+  private final static boolean EDGE = false;
   private final static String MSG_FILE = "sdroidmsg";
 
   private SDroidDb db;
@@ -58,11 +68,30 @@ public class SDroidClient {
     // We've finished with the cursor, close it
     offersCursor.close();
     
+
+    
+    
     // Write our message to file
     try {
-      FileOutputStream out = ctx.openFileOutput(MSG_FILE, 0);
-      offers.build().writeTo(out);
-      out.close();
+      if (!EDGE) {
+        FileOutputStream out = ctx.openFileOutput(MSG_FILE, 0);
+        offers.build().writeTo(out);
+        out.close();
+      } else {
+        HttpClient client = new DefaultHttpClient();
+        String url = "http://lappy:8888";
+        HttpPost postRequest = new HttpPost(url);
+        HttpParams params = new BasicHttpParams();
+        params.setParameter("sdroidmsg", offers.build().toByteString());
+        postRequest.setParams(params);
+        try {
+          ResponseHandler<String> responseHandler = new BasicResponseHandler();
+          String responseBody = client.execute(postRequest, responseHandler);
+          
+        } catch (Throwable t) {
+          
+        }
+      }
     } catch (FileNotFoundException e) {
       // It just hasn't been made yet... This shouldn't happen! openFileOutput
       // makes the file if it isn't there... but if it does

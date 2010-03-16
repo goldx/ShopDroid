@@ -74,7 +74,7 @@ public class DbMapper {
     } catch (SQLiteConstraintException e) {
       // The product must already exist!
       long id = db.findProduct(name);
-      if (id!=-1) 
+      if (id!=-1)
         return id;
       else
         return -1;
