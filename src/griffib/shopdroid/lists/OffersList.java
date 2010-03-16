@@ -11,11 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class OffersList extends SDroidList {
 
+  public static final String SUMMARY = "s";
+  
   private static final int MENU_BACK = Menu.FIRST;
   private static final int MENU_VIEW_ALL = Menu.FIRST+1;
   private static final int MENU_SHARE = Menu.FIRST+2;
@@ -107,6 +110,39 @@ public class OffersList extends SDroidList {
       break;
     }
     return super.onContextItemSelected(item);
+  }
+  
+  
+
+  @Override
+  protected void onListItemClick(ListView l, View v, int position, long id) {
+    super.onListItemClick(l, v, position, id);
+    Cursor c = cMain;
+    c.moveToPosition(position);
+    Intent i = new Intent(this, EditOffer.class);
+    i.putExtra(SDroidDb.KEY_OFFER_ID, id);
+    int columnIndex = c.getColumnIndex(SDroidDb.KEY_OFFER_SUM);
+    i.putExtra(SUMMARY, c.getString(columnIndex));
+    i.putExtra(SDroidDb.KEY_ATTRIBUTES_PREDICATE, dbHelper.getAttributePred(id));
+    i.putExtra(SDroidDb.KEY_ATTRIBUTES_VALUE, dbHelper.getAttributeVals(id));
+    i.putExtra(EDIT, true);
+    
+    startActivityForResult(i, EDIT_OFFER);
+  }
+  
+  
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode!=RESULT_CANCELED) {
+      Bundle extras = data.getExtras();
+      
+      switch(requestCode) {
+      case EDIT_OFFER:
+        break;
+      }
+    }
   }
 
   private void fillData(Long productID, boolean search) {

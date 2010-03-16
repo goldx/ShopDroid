@@ -260,4 +260,34 @@ public class SDroidDb {
     }
     return null;
   }
+  
+  public String[] getAttributeVals(Long id) {
+    Cursor c = mDb.query(ATTRIBUTES_TABLE, new String[] { KEY_ID, KEY_ATTRIBUTES_VALUE, KEY_OFFER_ID }, 
+        KEY_OFFER_ID+"=?", new String[] { id.toString() }, null, null, null);
+    c.moveToFirst();
+    String[] vals = new String[c.getCount()];
+    int i = 0;
+    int columnIndex = c.getColumnIndex(KEY_ATTRIBUTES_VALUE);
+    while (!c.isAfterLast()){
+      vals[i++] = c.getString(columnIndex);
+      c.moveToNext();
+    }
+    c.close();
+    return vals;
+  }
+  
+  public String[] getAttributePred(Long id){
+    Cursor c = mDb.query(ATTRIBUTES_TABLE, new String[] { KEY_ID, KEY_ATTRIBUTES_PREDICATE, KEY_OFFER_ID },
+        KEY_OFFER_ID+"=?", new String[] { id.toString() }, null, null, null);
+    c.moveToFirst();
+    String[] preds = new String[c.getCount()];
+    int i=0;
+    int columnIndex = c.getColumnIndex(KEY_ATTRIBUTES_PREDICATE);
+    while (!c.isAfterLast()) {
+      preds[i++] = c.getString(columnIndex);
+      c.moveToNext();
+    }
+    c.close();
+    return preds;
+  }
 }

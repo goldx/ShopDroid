@@ -1,5 +1,6 @@
 package griffib.shopdroid;
 
+import griffib.shopdroid.lists.OffersList;
 import griffib.shopdroid.lists.ProductsList;
 import griffib.shopdroid.lists.SDroidList;
 import android.app.Activity;
@@ -19,7 +20,10 @@ public class EditOffer extends Activity {
   private EditText summary;
   private long productId;
   private long offerId;
+  private String[] preds;
+  private String[] vals;
   private int numOfAttrs = 0;
+  private boolean edit;
   
   /** Called when activity is first created */
   @Override
@@ -37,8 +41,9 @@ public class EditOffer extends Activity {
     // Get product ID
     Bundle extras = getIntent().getExtras();
     if (extras != null) {
+      edit = extras.getBoolean(SDroidList.EDIT);
       // New offer - just need a product id
-      if (!(extras.getBoolean(SDroidList.EDIT))) {
+      if (!edit) {
         if ((Long) extras.getLong(SDroidDb.KEY_ID) != null)
           productId = extras.getLong(SDroidDb.KEY_ID);
       } 
@@ -48,14 +53,17 @@ public class EditOffer extends Activity {
           offerId = extras.getLong(SDroidDb.KEY_ID);
         if ((Long) extras.getLong(SDroidDb.KEY_PRODUCT_ID) != null)
           productId = extras.getLong(SDroidDb.KEY_PRODUCT_ID);
+        if (extras.getStringArray(SDroidDb.KEY_ATTRIBUTES_PREDICATE) != null)
+          preds = extras.getStringArray(SDroidDb.KEY_ATTRIBUTES_PREDICATE);
+        if (extras.getStringArray(SDroidDb.KEY_ATTRIBUTES_VALUE) != null)
+          vals = extras.getStringArray(SDroidDb.KEY_ATTRIBUTES_VALUE);
+        if (extras.getString(OffersList.SUMMARY)!=null)
+          summary.setText(extras.getString(OffersList.SUMMARY));
         
-        // Also a few other things TODO if we're editing
-        // Find out how many attrs there are already
-        
+        for (int i=0;i<preds.length;i++) {
+          addAttributeView(numOfAttrs++, preds[i], vals[i]);
+        }
       }
-      
-      for (int i=0;i<numOfAttrs;i++)
-        addAttributeView(i);
       
     } else {
       // Something has gone wrong - there should always be extras!!!
@@ -76,6 +84,10 @@ public class EditOffer extends Activity {
                          summary.getText().toString());
         
         bundle.putLong(SDroidDb.KEY_ID, productId);
+        
+        if(edit)
+          bundle.putLong(SDroidDb.KEY_OFFER_ID, offerId);
+        
         
         // Build arrays of attributes
         String[] tagsAttrName = new String[numOfAttrs];
@@ -117,13 +129,9 @@ public class EditOffer extends Activity {
     
     @Override
     public void onClick(View v) {
-      
       addAttributeView(numOfAttrs++);
-      
     }
-   });
-   
-     
+   });     
     
   }
   
@@ -137,6 +145,26 @@ public class EditOffer extends Activity {
     ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.FILL_PARENT,
                             ViewGroup.LayoutParams.FILL_PARENT);
+    extraAttr.setId(id);
+    attrList.addView(extraAttr, id, params);
+  }
+  
+  private void addAttributeView(int id, String pred, String val) {
+    
+    LinearLayout attrList = (LinearLayout) findViewById(R.id.attr_list);
+    LayoutInflater inflater = getLayoutInflater();
+    View row = inflater.inflate(R.layout.attr_row, null);
+    
+    LinearLayout extraAttr = (LinearLayout) row.findViewById(R.id.attr_row);
+    EditText predEditText = (EditText) row.findViewById(R.id.attr_name);
+    predEditText.setText(pred);
+    EditText valEditText = (EditText) row.findViewById(R.id.attr_val);
+    valEditText.setText(val);
+    
+    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.FILL_PARENT,
+                            ViewGroup.LayoutParams.FILL_PARENT);
+    
     extraAttr.setId(id);
     attrList.addView(extraAttr, id, params);
   }  
