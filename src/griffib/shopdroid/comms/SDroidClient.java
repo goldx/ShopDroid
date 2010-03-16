@@ -3,12 +3,18 @@ package griffib.shopdroid.comms;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 
@@ -28,7 +34,7 @@ import griffib.shopdroid.comms.OffersProto.Offer.Attribute;
  */
 public class SDroidClient {
   
-  private final static boolean EDGE = false;
+  private final static boolean EDGE = true;
   private final static String MSG_FILE = "sdroidmsg";
 
   private SDroidDb db;
@@ -41,7 +47,18 @@ public class SDroidClient {
   
   public void importOffers() {
     try {
-      Offers offers = Offers.parseFrom(ctx.openFileInput(MSG_FILE));
+      Offers offers;
+      if (!EDGE) {
+        offers = Offers.parseFrom(ctx.openFileInput(MSG_FILE));
+      } else {
+        HttpClient client = new DefaultHttpClient();
+        String url = "http://192.168.1.69:8888/sdroidmarshal";
+        HttpGet getRequest = new HttpGet(url);
+        
+        ResponseHandler<String> responseHandler = new BasicResponseHandler();
+        String proto = client.execute(getRequest, responseHandler);
+        offers = Offers.p;
+      }
       DbMapper map = new DbMapper(offers, db);
       map.integrate();
     } catch (FileNotFoundException e) {
@@ -79,11 +96,15 @@ public class SDroidClient {
         out.close();
       } else {
         HttpClient client = new DefaultHttpClient();
-        String url = "http://lappy:8888";
+        String url = "http://192.168.1.69:8888/sdroidmarshal";
         HttpPost postRequest = new HttpPost(url);
-        HttpParams params = new BasicHttpParams();
-        params.setParameter("sdroidmsg", offers.build().toByteString());
-        postRequest.setParams(params);
+        
+        String proto = offers.build().toString();
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+        nameValuePairs.add(new BasicNameValuePair("sdroidmsg", proto));
+        
+        postRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        
         try {
           ResponseHandler<String> responseHandler = new BasicResponseHandler();
           String responseBody = client.execute(postRequest, responseHandler);

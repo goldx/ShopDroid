@@ -65,8 +65,8 @@ public class ProductsList extends SDroidList {
     
     // Start server
     // The Server listens for incoming sync requests
-    Intent startServer = new Intent(this, SDroidServer.class);
-    this.startService(startServer);
+    //Intent startServer = new Intent(this, SDroidServer.class);
+    //this.startService(startServer);
   }
 
   /*
