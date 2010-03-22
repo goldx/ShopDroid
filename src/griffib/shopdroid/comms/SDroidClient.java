@@ -1,23 +1,20 @@
 package griffib.shopdroid.comms;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
+import java.io.InputStream;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.AbstractContentBody;
+import org.apache.http.entity.mime.content.InputStreamBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
@@ -57,7 +54,7 @@ public class SDroidClient {
         
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
         String proto = client.execute(getRequest, responseHandler);
-        offers = Offers.p;
+        offers = null;
       }
       DbMapper map = new DbMapper(offers, db);
       map.integrate();
@@ -95,15 +92,26 @@ public class SDroidClient {
         offers.build().writeTo(out);
         out.close();
       } else {
+        
+        // Set up the HttpClient
         HttpClient client = new DefaultHttpClient();
-        String url = "http://192.168.1.69:8888/sdroidmarshal";
+        String url = "http://192.168.2.103:8888/sdroidmarshal";
         HttpPost postRequest = new HttpPost(url);
         
-        String proto = offers.build().toString();
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-        nameValuePairs.add(new BasicNameValuePair("sdroidmsg", proto));
+        // Create the content for the message
+        AbstractContentBody[] parts = new AbstractContentBody[1];
+        InputStream ins = new ByteArrayInputStream(offers.build().toByteArray());
+        parts[0] = new InputStreamBody(ins, "sdroidmsg");
+        //parts[1] = new StringBody("uid");
         
-        postRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        // Add the content to the message
+        MultipartEntity requestContent = new MultipartEntity();
+        requestContent.addPart("message", parts[0]);
+        //requestContent.addPart("ID", parts[1]);
+        
+        // Send!
+        postRequest.setEntity(requestContent);
+        client.execute(postRequest);
         
         try {
           ResponseHandler<String> responseHandler = new BasicResponseHandler();
