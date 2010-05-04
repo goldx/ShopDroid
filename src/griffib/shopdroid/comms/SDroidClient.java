@@ -33,6 +33,7 @@ public class SDroidClient {
   
   private final static boolean EDGE = true;
   private final static String MSG_FILE = "sdroidmsg";
+  private final static String OCTECT_STEAM = "application/octect-steam";
 
   private SDroidDb db;
   private Context ctx;
@@ -101,7 +102,7 @@ public class SDroidClient {
         // Create the content for the message
         AbstractContentBody[] parts = new AbstractContentBody[1];
         InputStream ins = new ByteArrayInputStream(offers.build().toByteArray());
-        parts[0] = new InputStreamBody(ins, "sdroidmsg");
+        parts[0] = new InputStreamBody(ins, OCTECT_STEAM, "sdroidmsg");
         //parts[1] = new StringBody("uid");
         
         // Add the content to the message
@@ -112,6 +113,7 @@ public class SDroidClient {
         // Send!
         postRequest.setEntity(requestContent);
         client.execute(postRequest);
+        ins.close();
         
         try {
           ResponseHandler<String> responseHandler = new BasicResponseHandler();
