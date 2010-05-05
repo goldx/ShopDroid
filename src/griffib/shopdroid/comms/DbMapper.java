@@ -137,4 +137,8 @@ public class DbMapper {
     }
   }
   
+  public static String FooMapper() {
+    return "foo";
+  }
+  
 }

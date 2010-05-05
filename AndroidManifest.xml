@@ -19,7 +19,13 @@ android:versionCode="1" android:versionName="alpha_1.0">
     <!-- Services -->
     <service android:name=".comms.SDroidServer"></service>
     
+    <!-- For Tests -->
+    <uses-library android:name="android.test.runner"/>
+    
   </application>
+  <instrumentation android:label="All Tests"
+  	android:name="griffib.shopdroid.tests.MyInstrumentationTestRunner"
+  	android:targetPackage="griffib.shopdroid"/>
   <uses-sdk android:minSdkVersion="4" />
   <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 

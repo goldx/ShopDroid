@@ -63,10 +63,9 @@ public class ProductsList extends SDroidList {
     // Setup a context menu
     registerForContextMenu(getListView());
     
-    // Start server
-    // The Server listens for incoming sync requests
-    //Intent startServer = new Intent(this, SDroidServer.class);
-    //this.startService(startServer);
+    //Start polling
+    Intent startServer = new Intent(this, SDroidServer.class);
+    this.startService(startServer);
   }
 
   /*

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -82,10 +83,7 @@ public class SDroidClient {
     
     // We've finished with the cursor, close it
     offersCursor.close();
-    
-
-    
-    
+        
     // Write our message to file
     try {
       if (!EDGE) {
@@ -103,12 +101,15 @@ public class SDroidClient {
         AbstractContentBody[] parts = new AbstractContentBody[1];
         InputStream ins = new ByteArrayInputStream(offers.build().toByteArray());
         parts[0] = new InputStreamBody(ins, OCTECT_STEAM, "sdroidmsg");
-        //parts[1] = new StringBody("uid");
+        parts[1] = new StringBody("uid");
+        String time = ((Long)System.currentTimeMillis()).toString();
+        parts[2] = new StringBody(time);
         
         // Add the content to the message
         MultipartEntity requestContent = new MultipartEntity();
         requestContent.addPart("message", parts[0]);
-        //requestContent.addPart("ID", parts[1]);
+        requestContent.addPart("ID", parts[1]);
+        requestContent.addPart("timestamp", parts[2]);
         
         // Send!
         postRequest.setEntity(requestContent);
